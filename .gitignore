@@ -8,13 +8,8 @@
 *.cmxs
 *.cmxa
 
-# ocamlbuild working directory
-_build/
+autom4te.cached/
 
 # ocamlbuild targets
 *.byte
 *.native
-
-# oasis generated files
-setup.data
-setup.log

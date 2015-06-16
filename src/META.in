@@ -1,0 +1,10 @@
+version = "@VERSION@"
+description = " Logging facilities using tags and levels"
+requires = "@PACKAGES@"
+archive(byte) = "taglog.cma"
+archive(native) = "taglog.cmxa"
+archive(plugin,byte) = "taglog.cma"
+archive(plugin,native) = "taglog.cmxs"
+
+
+
