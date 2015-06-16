@@ -9,6 +9,11 @@
 *.cmxa
 
 autom4te.cached/
+autom4te.cache/
+config.log
+config.status
+master.Makefile
+ocaml_config.sh
 
 # ocamlbuild targets
 *.byte
