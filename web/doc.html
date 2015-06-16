@@ -4,11 +4,14 @@
 <p>
 ...
 </p>
-<ocaml-eval error-exc="false" toplevel="true">
+<oc toplevel="false">
+type tag = Gui | Database | Network;;
+
+module T = Taglog.Make
+  (struct type t = tag let compare = Pervasives.compare end)
 let f x = x + 1 ;;
-assert false;;
 print_endline &quot;hello world!&quot;;;
-</ocaml-eval>
+</oc>
 </section>
 
 <section id="lib" title="Library">

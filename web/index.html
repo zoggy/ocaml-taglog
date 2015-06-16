@@ -1,4 +1,23 @@
-<sw-page main="true" navbar-home="active" stog:rss-length="10" stog:section-counter="false" stog:site-description="" stog:site-email="you 'AT' yoursite 'DOT' net" stog:site-url="https://yoursite.net" stog:subsection-counter="false" title="Taglog" stog:use="software">
+<sw-page main="true"
+navbar-home="active"
+stog:rss-length="10"
+stog:section-counter="false"
+stog:site-description=""
+stog:site-email="you 'AT' yoursite 'DOT' net"
+stog:site-url="https://zoggy.github.io/taglog"
+stog:subsection-counter="false"
+title="Taglog"
+stog:use="software"
+with-contents="true"
+>
+<stog:ml foo=""><icode defer_="1" lang="ocaml"><contents/></icode></stog:ml>
+
+<stog:oc toplevel="true" error-exc="true">
+<ocaml-eval defer_="1" toplevel="&lt;toplevel/&gt;" error-exc="&lt;error-exc/&gt;">
+<contents/></ocaml-eval>
+</stog:oc>
+
+<contents>
 <section>
 <p>
 Taglog is ...
@@ -14,5 +33,5 @@ Taglog is ...
 
 </p>
 </section>
-
+</contents>
 </sw-page>

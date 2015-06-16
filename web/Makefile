@@ -6,7 +6,7 @@ STOG_SERVER=./mystog-server
 DEST_DIR=/tmp
 BASE_URL_OPTION=
 PACKAGES=stog.markdown
-STOG_OPTIONS=--stog-ocaml-session "$(STOG_OCAML_SESSION)  -I ../src" -d $(DEST_DIR) $(BASE_URL_OPTION)
+STOG_OPTIONS=--stog-ocaml-session "$(STOG_OCAML_SESSION) -package ocf -I ../src" -d $(DEST_DIR) $(BASE_URL_OPTION)
 
 build:
 	$(MAKE) site
@@ -23,7 +23,7 @@ test:
 
 stog:$(STOG) $(STOG_OCAML_SESSION)
 server: $(STOG_SERVER) $(STOG_OCAML_SESSION)
-	$(STOG_SERVER) .
+	$(STOG_SERVER) $(STOG_OPTIONS) .
 
 .PHONY:$(STOG) $(STOG_OCAML_SESSION)
 
@@ -34,7 +34,7 @@ $(STOG_SERVER):
 	$(MKSTOG) -o $@ -package stog.server,$(PACKAGES) -thread -linkall
 
 $(STOG_OCAML_SESSION):
-	$(MKSTOG_OCAML_SESSION) -o $@
+	$(MKSTOG_OCAML_SESSION) -o $@ -I ../src ../src/taglog.cma -package ocf
 
 clean:
 	rm -fr .stog/cache
