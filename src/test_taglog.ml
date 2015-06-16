@@ -1,13 +1,20 @@
 
-type tag = Foo | Bar | Gee [@@deriving yojson]
+type tag = Foo | Bar | Gee
+
+let tag_of_yojson = function
+| `String "Foo" -> Foo
+| `String "Bar" -> Bar
+| `String "Gee" -> Gee
+| json -> Ocf.invalid_value json
+
+let tag_to_yojson = function
+| Foo -> `String "Foo"
+| Bar -> `String "Bar"
+| Gee -> `String "Gee"
 
 let tag_wrapper =
   let to_ = tag_to_yojson in
-  let of_ ?def x =
-    match tag_of_yojson x with
-    | `Ok tag -> tag
-    | `Error _ -> Ocf.invalid_value x
-  in
+  let of_ ?def x = tag_of_yojson x in
   Ocf.Wrapper.make to_ of_
 
 module T = Taglog.Make
@@ -39,6 +46,16 @@ open Taglog.Operators
 
 let () = Ocf.set dump_level 1
 
+let () =
+  let g = Ocf.add Ocf.group ["condition"] dump_cond in
+  try
+    Ocf.from_string g
+      {| { condition: ("OR", "Foo", ("AND", "Bar", ("NOT", "Gee"))) } |};
+    print_endline (Ocf.to_string g)
+  with
+  Ocf.Error e ->
+    prerr_endline (Ocf.string_of_error e);
+    exit 1
 
 let test_levels () =
   Ocf.set dump_cond None ;

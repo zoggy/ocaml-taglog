@@ -76,8 +76,7 @@ TEST1=test1
 test: test1
 
 $(TEST1): $(LIB) test_taglog.ml
-	$(OCAMLFIND) ocamlopt -verbose -o $@ -linkpkg \
-	-package ocf,ppx_deriving_yojson \
+	$(OCAMLFIND) ocamlopt -verbose -o $@ -linkpkg -package ocf \
 	$(LIB) test_taglog.ml
 	./$(TEST1)
 
