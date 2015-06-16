@@ -47,9 +47,18 @@ val eval : ('a -> bool) -> 'a cond -> bool
 
 module Operators :
   sig
-    val ( |?| ) : 'a cond -> 'a cond -> 'a cond
-    val ( &?& ) : 'a cond -> 'a cond -> 'a cond
+    (** !? x => Tag x *)
+    val ( !? ) : 'a -> 'a cond
+
+    (** ~? x => Not x *)
     val ( ~? ) : 'a cond -> 'a cond
+
+    (** x |?| y => Or (x,y) *)
+    val ( |?| ) : 'a cond -> 'a cond -> 'a cond
+
+    (** x &?& y => And (x,y) *)
+    val ( &?& ) : 'a cond -> 'a cond -> 'a cond
+
   end
 
 val ikprintf :
