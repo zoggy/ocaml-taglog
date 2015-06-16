@@ -105,7 +105,7 @@ module type S =
       val mk_str_log :
         int Ocf.conf_option ->
         tag cond option Ocf.conf_option ->
-        (?level:int -> ?tags:tag list -> string -> unit) ->
+        (string -> unit) ->
         ?level:int -> ?tags:tag list -> string -> unit
 
   end
@@ -135,6 +135,7 @@ module Make(T:Set.OrderedType) : S with type tag = T.t =
     let mk_fmt_log o_lev o_cond f = mk iprintf o_lev o_cond
       (fun ?level ?tags x -> f x)
     let mk_str_log o_lev o_cond f =
-      mk (ignore : string -> unit) o_lev o_cond f
+      mk (ignore : string -> unit) o_lev o_cond
+      (fun ?level ?tags x -> f x)
 
   end

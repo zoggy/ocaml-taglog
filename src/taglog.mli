@@ -83,7 +83,7 @@ module type S =
     val mk_str_log :
       int Ocf.conf_option ->
       tag cond option Ocf.conf_option ->
-      (?level:int -> ?tags:tag list -> string -> unit) ->
+      (string -> unit) ->
       ?level:int -> ?tags:tag list -> string -> unit
   end
 module Make :
