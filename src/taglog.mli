@@ -69,7 +69,7 @@ module type S =
       int Ocf.conf_option ->
       tag cond option Ocf.conf_option ->
       (?level:int -> ?tags:tag list -> 'a -> 'b) ->
-      unit -> ?level:int -> ?tags:tag list -> 'a -> 'b
+      ?level:int -> ?tags:tag list -> 'a -> 'b
     val mk_log :
       int Ocf.conf_option ->
       tag cond option Ocf.conf_option ->

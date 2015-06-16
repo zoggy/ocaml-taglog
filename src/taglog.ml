@@ -83,7 +83,7 @@ module type S =
     val mk : ('a -> 'b) ->
         int Ocf.conf_option ->
         tag cond option Ocf.conf_option ->
-        (?level:int -> ?tags:tag list -> 'a -> 'b) -> unit ->
+        (?level:int -> ?tags:tag list -> 'a -> 'b) ->
         ?level:int -> ?tags:tag list -> 'a -> 'b
 
     val mk_log :
@@ -118,7 +118,7 @@ module Make(T:Set.OrderedType) : S with type tag = T.t =
 
     let mk ign =
       fun option_level
-          (option_cond : tag cond option Ocf.conf_option) f () ->
+          (option_cond : tag cond option Ocf.conf_option) f ->
       fun ?level ?tags arg ->
         let lev = match level with None -> 0 | Some n -> n in
         if Ocf.get option_level < lev then
@@ -131,9 +131,10 @@ module Make(T:Set.OrderedType) : S with type tag = T.t =
               | Some list when !eval list cond -> f ?level ?tags arg
               | _ -> ign arg
 
-    let mk_log o_lev o_cond f = mk iprintf o_lev o_cond f ()
+    let mk_log o_lev o_cond f = mk iprintf o_lev o_cond f
     let mk_fmt_log o_lev o_cond f = mk iprintf o_lev o_cond
-      (fun ?level ?tags x -> f x) ()
-    let mk_str_log o_lev o_cond f = mk (ignore : string -> unit) o_lev o_cond f ()
+      (fun ?level ?tags x -> f x)
+    let mk_str_log o_lev o_cond f =
+      mk (ignore : string -> unit) o_lev o_cond f
 
   end

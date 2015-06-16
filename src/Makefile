@@ -90,11 +90,6 @@ docstog: dump.odoc
 dump.odoc: taglog.mli
 	$(OCAMLFIND) ocamldoc -v $(OF_FLAGS) taglog.mli -dump $@
 
-docstog: dump.odoc
-	$(MKDIR) ../web/refdoc
-	$(OCAMLFIND) ocamldoc 	-load dump.odoc \
-	-t Taglog -d ../web/refdoc -g odoc_stog.cmo
-
 
 ##########
 install: install-lib
@@ -102,7 +97,8 @@ install: install-lib
 install-lib:
 	@$(OCAMLFIND) install $(PACKAGE) META \
 		$(LIB_CMIFILES) $(LIB_CMXFILES) $(LIB_OFILES) \
-		$(LIB_BYTE) $(LIB) $(LIB_A) $(LIB_CMXS)
+		$(LIB_BYTE) $(LIB) $(LIB_A) $(LIB_CMXS) \
+		$(LIB_CMIFILES:.cmi=.mli)
 
 uninstall: uninstall-lib
 
