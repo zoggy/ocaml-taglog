@@ -71,8 +71,17 @@ $(LIB_BYTE): $(LIB_CMIFILES) $(LIB_CMOFILES)
 	$(OCAMLFIND) ocamlc -a -o $@ $(LIB_CMOFILES)
 
 # Test
+TEST1=test1
 
-.PHONY: example
+test: test1
+
+$(TEST1): $(LIB) test_taglog.ml
+	$(OCAMLFIND) ocamlopt -verbose -o $@ -linkpkg \
+	-package ocf,ppx_deriving_yojson \
+	$(LIB) test_taglog.ml
+	./$(TEST1)
+
+.PHONY: $(TEST1)
 
 ##########
 .PHONY: doc webdoc ocamldoc

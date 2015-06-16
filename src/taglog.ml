@@ -102,13 +102,13 @@ module type S =
         ?tags:tag list ->
         ('a, unit, 'b, unit) format4 -> 'a
 
-      val mk_str_log :
-        int Ocf.conf_option ->
+    val mk_str_log :
+      int Ocf.conf_option ->
         tag cond option Ocf.conf_option ->
         (string -> unit) ->
         ?level:int -> ?tags:tag list -> string -> unit
-
   end
+
 module Make(T:Set.OrderedType) : S with type tag = T.t =
   struct
     type tag = T.t
