@@ -30,10 +30,10 @@
 
 (** Conditions on tags. *)
 type 'a cond =
-    Tag of 'a
-  | Not of 'a cond
-  | Or of 'a cond * 'a cond
-  | And of 'a cond * 'a cond
+  | Tag of 'a (** true if the tag is present *)
+  | Not of 'a cond  (** logical not *)
+  | Or of 'a cond * 'a cond  (** logical or *)
+  | And of 'a cond * 'a cond  (** logicial and *)
 
 (** [cond_wrapper wrapper] creates a ['a cond] wrapper for
   Ocf options from a wrapper for ['a] values. *)
@@ -44,7 +44,7 @@ val cond_wrapper : 'a Ocf.Wrapper.t -> 'a cond Ocf.Wrapper.t
   indicates whether a given tag is present. *)
 val eval : ('a -> bool) -> 'a cond -> bool
 
-module Operators :
+module Ops :
   sig
     (** ?? x => Tag x *)
     val ( ?? ) : 'a -> 'a cond

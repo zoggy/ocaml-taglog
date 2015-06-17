@@ -42,8 +42,6 @@ let fail ?level ?tags str =
     (Printf.ksprintf print_endline) ?level ?tags
     "%s %a" str (fun () -> assert false) ()
 
-open Taglog.Operators
-
 let () = Ocf.set dump_level 1
 
 let () =
@@ -66,7 +64,7 @@ let test_levels () =
 
 let test_tags () =
   Ocf.set dump_cond
-    (Some Taglog.Operators.(
+    (Some Taglog.Ops.(
       ??Foo || ??Bar && (~~ ??Gee)
     ));
   log ~tags: [Foo] "OK with tag Foo" ;

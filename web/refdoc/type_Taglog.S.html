@@ -1,0 +1,32 @@
+<ocamldoc with-contents="true"><title>Taglog reference documentation : Taglog.S</title><contents><div class="ocamldoc-page">
+<code class="code"><span class="keyword">sig</span><br/>
+&#160;&#160;<span class="keyword">type</span>&#160;tag<br/>
+&#160;&#160;<span class="keyword">val</span>&#160;extend_eval&#160;:<br/>
+&#160;&#160;&#160;&#160;((<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag&#160;list&#160;<span class="keywordsign">-&gt;</span>&#160;<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag&#160;<span class="constructor">Taglog</span>.cond&#160;<span class="keywordsign">-&gt;</span>&#160;bool)&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;&#160;<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag&#160;list&#160;<span class="keywordsign">-&gt;</span>&#160;<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag&#160;<span class="constructor">Taglog</span>.cond&#160;<span class="keywordsign">-&gt;</span>&#160;bool)&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;unit<br/>
+&#160;&#160;<span class="keyword">val</span>&#160;mk&#160;:<br/>
+&#160;&#160;&#160;&#160;(<span class="keywordsign">'</span>a&#160;<span class="keywordsign">-&gt;</span>&#160;<span class="keywordsign">'</span>b)&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;int&#160;<span class="constructor">Ocf</span>.conf_option&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag&#160;<span class="constructor">Taglog</span>.cond&#160;option&#160;<span class="constructor">Ocf</span>.conf_option&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;(?level:int&#160;<span class="keywordsign">-&gt;</span>&#160;?tags:<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag&#160;list&#160;<span class="keywordsign">-&gt;</span>&#160;<span class="keywordsign">'</span>a&#160;<span class="keywordsign">-&gt;</span>&#160;<span class="keywordsign">'</span>b)&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;?level:int&#160;<span class="keywordsign">-&gt;</span>&#160;?tags:<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag&#160;list&#160;<span class="keywordsign">-&gt;</span>&#160;<span class="keywordsign">'</span>a&#160;<span class="keywordsign">-&gt;</span>&#160;<span class="keywordsign">'</span>b<br/>
+&#160;&#160;<span class="keyword">val</span>&#160;mk_log&#160;:<br/>
+&#160;&#160;&#160;&#160;int&#160;<span class="constructor">Ocf</span>.conf_option&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag&#160;<span class="constructor">Taglog</span>.cond&#160;option&#160;<span class="constructor">Ocf</span>.conf_option&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;(?level:int&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;&#160;?tags:<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag&#160;list&#160;<span class="keywordsign">-&gt;</span>&#160;(<span class="keywordsign">'</span>a,&#160;unit,&#160;<span class="keywordsign">'</span>b,&#160;unit)&#160;<span class="constructor">Pervasives</span>.format4&#160;<span class="keywordsign">-&gt;</span>&#160;<span class="keywordsign">'</span>a)&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;?level:int&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;?tags:<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag&#160;list&#160;<span class="keywordsign">-&gt;</span>&#160;(<span class="keywordsign">'</span>a,&#160;unit,&#160;<span class="keywordsign">'</span>b,&#160;unit)&#160;<span class="constructor">Pervasives</span>.format4&#160;<span class="keywordsign">-&gt;</span>&#160;<span class="keywordsign">'</span>a<br/>
+&#160;&#160;<span class="keyword">val</span>&#160;mk_fmt_log&#160;:<br/>
+&#160;&#160;&#160;&#160;int&#160;<span class="constructor">Ocf</span>.conf_option&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag&#160;<span class="constructor">Taglog</span>.cond&#160;option&#160;<span class="constructor">Ocf</span>.conf_option&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;((<span class="keywordsign">'</span>a,&#160;unit,&#160;<span class="keywordsign">'</span>b,&#160;unit)&#160;<span class="constructor">Pervasives</span>.format4&#160;<span class="keywordsign">-&gt;</span>&#160;<span class="keywordsign">'</span>a)&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;?level:int&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;?tags:<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag&#160;list&#160;<span class="keywordsign">-&gt;</span>&#160;(<span class="keywordsign">'</span>a,&#160;unit,&#160;<span class="keywordsign">'</span>b,&#160;unit)&#160;<span class="constructor">Pervasives</span>.format4&#160;<span class="keywordsign">-&gt;</span>&#160;<span class="keywordsign">'</span>a<br/>
+&#160;&#160;<span class="keyword">val</span>&#160;mk_str_log&#160;:<br/>
+&#160;&#160;&#160;&#160;int&#160;<span class="constructor">Ocf</span>.conf_option&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag&#160;<span class="constructor">Taglog</span>.cond&#160;option&#160;<span class="constructor">Ocf</span>.conf_option&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;(string&#160;<span class="keywordsign">-&gt;</span>&#160;unit)&#160;<span class="keywordsign">-&gt;</span><br/>
+&#160;&#160;&#160;&#160;?level:int&#160;<span class="keywordsign">-&gt;</span>&#160;?tags:<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag&#160;list&#160;<span class="keywordsign">-&gt;</span>&#160;string&#160;<span class="keywordsign">-&gt;</span>&#160;unit<br/>
+<span class="keyword">end</span></code></div></contents></ocamldoc>

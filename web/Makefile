@@ -5,8 +5,8 @@ STOG_OCAML_SESSION=./mystog-ocaml-session
 STOG_SERVER=./mystog-server
 DEST_DIR=/tmp
 BASE_URL_OPTION=
-PACKAGES=stog.markdown
-STOG_OPTIONS=--stog-ocaml-session "$(STOG_OCAML_SESSION) -package ocf -I ../src" -d $(DEST_DIR) $(BASE_URL_OPTION)
+PACKAGES=stog.markdown,stog-writing
+STOG_OPTIONS=--stog-ocaml-session "$(STOG_OCAML_SESSION) -ppx 'ocamlfind ppx_deriving/ppx_deriving `ocamlfind query -predicates ppx_driver,byte -a-format ppx_deriving_yojson`' -package ppx_deriving_yojson,yojson,ocf -I ../src" -d $(DEST_DIR) $(BASE_URL_OPTION)
 
 build:
 	$(MAKE) site
@@ -34,7 +34,8 @@ $(STOG_SERVER):
 	$(MKSTOG) -o $@ -package stog.server,$(PACKAGES) -thread -linkall
 
 $(STOG_OCAML_SESSION):
-	$(MKSTOG_OCAML_SESSION) -o $@ -I ../src ../src/taglog.cma -package ocf
+	$(MKSTOG_OCAML_SESSION) -o $@ -I ../src ../src/taglog.cma \
+	-package ppx_deriving_yojson,ocf
 
 clean:
 	rm -fr .stog/cache

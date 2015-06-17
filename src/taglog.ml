@@ -61,7 +61,7 @@ let rec eval mem = function
 | Or (c1, c2) -> (eval mem c1) || (eval mem c2)
 | And (c1, c2) -> (eval mem c1) && (eval mem c2)
 
-module Operators =
+module Ops =
   struct
     let (??) t = Tag t
     let (~~) c = Not c

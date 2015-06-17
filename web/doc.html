@@ -1,23 +1,259 @@
 <sw-page navbar-doc="active" title="Documentation">
 
-<section id="usage" title="Usage">
 <p>
-...
+Read the <doc href="/refdoc/Taglog.html">reference documentation</doc>.
+</p>
+<prepare-notes>
+<p> Below is a guided tour of the library through examples. </p>
+<prepare-toc>
+<toc/>
+<section id="intro" title="Introduction">
+<p>
+A classical way to handle log of messages in an application is
+to have a configuration option set a log level, and a log function
+having a <ml>level</ml> parameter. At each call,
+the <ml>level</ml> parameter of the function is compared to the
+level in the configuration option and if the parameter is less than
+or equal to the option value, then the message is output. Levels
+can even have names like "Debug", "Critical", "Warning", ...
+</p>
+<p>
+This approach is useful but setting the log level to "Debug" in an
+application can result in having a lot of messages from all the
+parts of an application while looking for what's going only in
+one part of the application (for example database access, user interface,
+networking, ...).
+</p>
+<p>
+The Taglog library provides a way to handle both log levels and
+conditions based on tags. The log functions take as parameters the
+log level, as usual, but also a list of tags. These tags are values
+of an OCaml type defined in the application. These tags will
+be constructors of a variant type, for example:
+</p>
+<ocaml>type tag = Database | Networking | ...</ocaml>
+<p>
+The tags provided when calling the log functions are used to
+evaluate a condition, stored in an option as is the log level.
+This condition is a logical expression of type <ml>'a cond</ml>,
+<ml>'a</ml> being the type of tags:
+</p>
+<ocaml>type 'a cond =
+  | Tag of 'a (** true if the tag is present *)
+  | Not of 'a cond  (** logical not *)
+  | Or of 'a cond * 'a cond  (** logical or *)
+  | And of 'a cond * 'a cond  (** logicial and *)
+</ocaml>
+<p>
+When the log functions are passed a message, it will be
+ignored if the given level is stricly higher than the log
+level in the associated option or if the condition (also stored
+in a configuration option) evaluates to <ml>false</ml> with the
+given the list of tags.
+</p>
+<p>
+Taglog used <ext-a href="https://zoggy.github.io/ocf/">Ocf</ext-a>
+to handle configuration options and provides functions to create
+such options.
+</p>
+<p>
+Let's see some examples of usage.
+</p>
+</section>
+<section id="tags" title="Defining tags">
+<p>
+The first thing to do is to define a type to represent tags.
+</p>
+<oc>
+type tag = Database | Error | Network;;
+</oc>
+<p>
+To store a condition on these tags in an Ocf option, we have to
+define a wrapper for our <ml>tag</ml> type, which is a JSON
+encoder/decoder. Here is a simple way to do it<note>One can also
+use <ext-a href="https://github.com/whitequark/ppx_deriving_yojson/">ppx_deriving_yojson</ext-a> to generate a part of the code from the type definition.</note>:
+</p>
+<oc>
+let tag_wrapper =
+  let to_j = function
+  | Database -> `String "database"
+  | Error -> `String "error"
+  | Network -> `String "network"
+  in
+  let from_j ?def (json : Yojson.Safe.json) =
+    match json with
+    | `String s ->
+      begin
+        match String.lowercase s with
+        | "database" -> Database
+        | "error" -> Error
+        | "network" -> Network
+        | _ -> Ocf.invalid_value json
+      end
+    | _ -> Ocf.invalid_value json
+  in
+  Ocf.Wrapper.make to_j from_j
+</oc>
+<p>
+To create an Ocf configuration option, we need to create a wrapper
+for values of type <ml>tag cond option</ml>, as the the condition
+is optional (no condition will mean that the log functions will
+not use the provided tags to determine whether to ignore the
+message). We do so by combining our tag wrapper,
+<ml>Taglog.cond_wrapper</ml> and <ml>Ocf.Wrapper.option</ml>:
+</p>
+<oc>
+let cond_opt_wrapper = Ocf.Wrapper.option (Taglog.cond_wrapper tag_wrapper);;
+</oc>
+<p>Then we can create a configuration option with this wrapper,
+with a default condition to log only messages tagged with
+<ml>Error</ml>:
+</p>
+<oc>let cond_option = Ocf.option cond_opt_wrapper (Some (Taglog.Tag Error))</oc>
+</section>
+
+<section id="applyfunctor"
+  title="Applying &lt;ml&gt;Taglog.Make&lt;/ml&gt;">
+<p>
+Now that our <ml>tag</ml> type is defined, we can apply
+the <ml>Taglog.Make</ml> module:
 </p>
 <oc toplevel="false">
-type tag = Gui | Database | Network;;
+module T = Taglog.Make (struct type t = tag end)
+</oc>
+<p>
+The resulting <ml>T</ml> module contains functions to create log
+functions which use our tags.
+</p>
+</section>
 
-module T = Taglog.Make
-  (struct type t = tag let compare = Pervasives.compare end)
-let f x = x + 1 ;;
-print_endline &quot;hello world!&quot;;;
+<section id="createlog" title="Creating and using log functions">
+<p>
+Let's define a simple function taking a format and
+outputting to <ml>stderr</ml>:
+</p>
+<oc>let to_stderr fmt = Printf.ksprintf prerr_endline fmt;;</oc>
+<p>Note that our definition of <ml>log</ml> must have a parameter so
+for the <ml>format4</ml> type to be polymorphic.
+</p>
+<p>
+To create a log function handling log level and conditions, we
+first have to create a log level configuration option, with
+default value <ml>0</ml>:
+</p>
+<oc>let level_option = Ocf.int 0 ;;</oc>
+<p>
+Then we cas use <ml>Taglog.mk_fmt_log</ml> to create a log function:
+</p>
+<oc>let log ?level = T.mk_fmt_log level_option cond_option to_stderr ?level</oc>
+<p> We obtain a function with the expected type, let's test it:
+</p>
+<oc>log "Hello %s !" "world";;
+log "%d + %d = %d" 1 1 2 ;;
+</oc>
+<p>Of course nothing is printed as our condition option (stored in
+<ml>cond_option</ml>) specifies that only messages with tag <ml>Error</ml>
+should be printed. Let's tag our messages:
+</p>
+<oc>log ~tags: [Error] "Hello %s !" "world";;
+log ~tags: [Error ; Database] "%d + %d = %d" 1 1 2 ;;
+</oc>
+<p>
+Other <ml>mk*</ml> functions are provided in the module obtained with
+the <ml>Taglog.Make</ml> functor.
+</p>
+</section>
+
+<section id="examples" title="More fun">
+<p>
+In the case of the <ml>Error</ml> tag, we could choose to print it,
+no matter what the value of our condition option. To do so, we can
+extend the condition evaluation function to always return true if
+the list of tags contains <ml>Error</ml>:
+</p>
+<oc>
+let f fallback tags cond =
+  (List.mem Error tags) || fallback tags cond;;
+T.extend_eval f ;;
+</oc>
+<p>Let's change our condition to print only messages regarding database
+but when Network is not concerned. Here we use the
+<ml>Taglog.Operators</ml> module to define more easily <ml>tag cond</ml>
+values:
+</p>
+<oc><![CDATA[Ocf.set cond_option (Some Taglog.Ops.(??Database && ~~ ??Network))]]>
+</oc>
+<p>Now let's see what happens when we call our <ml>log</ml> function
+in various ways:</p>
+<oc>
+log ~tags: [Database] "message about database";;
+log ~tags: [Database ; Network] "network error while querying database"
+  (* not printed because or our condition does not accept Network *) ;;
+log ~tags: [Error] "Error in query %S" "SELECT ..."
+  (* printed thanks to our extension to the evaluation function *);;
+log "Hello!" (* not printed since because no tags *);;
 </oc>
 </section>
 
-<section id="lib" title="Library">
+<section id="opentags" title="Using open tags">
 <p>
-...
+The <ml>tag</ml> type can be an open type with a definition like:
 </p>
-</section>
+<oc>type tag = .. ;;
+type tag += Database | Error | Network ;;
+</oc>
+<p>
+In this case, additional tags can be added by modules, even dynamically loaded
+modules. These modules can then use the same log function. The condition
+option can contain such additonal tags. What has to be done to load and store
+the condition is to extend the tag wrapper.
+<ext-a href="https://github.com/whitequark/ppx_deriving_yojson/">ppx_deriving_yojson</ext-a> is able to handle such open types and extend the JSON wrappers.
+</p>
+<p>Here is an example:</p>
+<oc toplevel="false">type tag = .. [@@deriving yojson] ;;
+type tag += Database | Error | Network [@@deriving yojson] ;;
+</oc>
+<oc>
+let tag_wrapper =
+  let to_ = tag_to_yojson in
+  let of_ ?def x =
+    match tag_of_yojson x with
+    | `Ok tag -> tag
+    | `Error _ -> Ocf.invalid_value x
+  in
+  Ocf.Wrapper.make to_ of_;;
 
+let cond_opt_wrapper = Ocf.Wrapper.option (Taglog.cond_wrapper tag_wrapper);;
+let cond_option = Ocf.option cond_opt_wrapper (Some (Taglog.Tag Error))
+</oc>
+<p>Now we extend our <ml>tag</ml> type, change our condition option to use
+this tag, create a log function and test it:
+</p>
+<oc>type tag += UI [@@deriving yojson];;
+Ocf.set cond_option (Some Taglog.Ops.(??UI || ??Error));;
+</oc>
+<oc toplevel="false">
+module T = Taglog.Make (struct type t = tag end)
+</oc>
+<oc>let log ?level = T.mk_fmt_log level_option cond_option to_stderr ?level</oc>
+<oc>log ~tags: [UI] "hello %s" "world" ;;
+log ~tags: [Database] "tried connected to database"
+  (* not printed since only UI and Error messages are accepted *) ;;
+</oc>
+<p>
+We can also see that the tag wrapper was automatically extended by
+the ppx_deriving_yojson extension, so that we can load or
+store our condition:
+</p>
+<oc>let () =
+  let g = Ocf.add Ocf.group ["condition"] cond_option in
+  let g = Ocf.add g ["level"] level_option in
+  let g = Ocf.add_group Ocf.group ["log"] g in
+  print_endline (Ocf.to_string g)
+</oc>
+</section>
+</prepare-toc>
+<hr width="100%"/>
+<notes/>
+</prepare-notes>
 </sw-page>

@@ -94,6 +94,7 @@ docstog: dump.odoc
 	$(MKDIR) ../web/refdoc
 	ocamldoc.opt -t "Taglog reference documentation" \
 	-load $^ -d ../web/refdoc -g odoc_stog.cmxs
+	rpl 'VAL(&&)' 'VAL(&amp;amp;&amp;amp;)' ../web/refdoc/*html
 
 dump.odoc: taglog.mli
 	$(OCAMLFIND) ocamldoc -v $(OF_FLAGS) taglog.mli -dump $@

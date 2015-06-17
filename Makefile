@@ -43,6 +43,9 @@ re : depend clean all
 doc: dummy
 	cd src && $(MAKE) doc
 
+docstog: dummy
+	cd src && $(MAKE) docstog
+
 # myself
 
 master.Makefile: master.Makefile.in config.status src/META.in
