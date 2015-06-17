@@ -110,10 +110,11 @@ module type S =
         ?level:int -> ?tags:tag list -> string -> unit
   end
 
-module Make(T:Set.OrderedType) : S with type tag = T.t =
+module type P = sig type t end
+
+module Make(T:P) : S with type tag = T.t =
   struct
     type tag = T.t
-    module Set = Set.Make(T)
     let eval = ref (fun list -> eval (fun t -> List.mem t list))
     let extend_eval f = eval := f !eval
 
