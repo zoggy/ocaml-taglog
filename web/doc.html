@@ -20,7 +20,7 @@ can even have names like "Debug", "Critical", "Warning", ...
 <p>
 This approach is useful but setting the log level to "Debug" in an
 application can result in having a lot of messages from all the
-parts of an application while looking for what's going only in
+parts of an application while looking for what's going on only in
 one part of the application (for example database access, user interface,
 networking, ...).
 </p>
@@ -49,7 +49,7 @@ When the log functions are passed a message, it will be
 ignored if the given level is stricly higher than the log
 level in the associated option or if the condition (also stored
 in a configuration option) evaluates to <ml>false</ml> with the
-given the list of tags.
+given list of tags.
 </p>
 <p>
 Taglog used <ext-a href="https://zoggy.github.io/ocf/">Ocf</ext-a>
@@ -133,7 +133,7 @@ Let's define a simple function taking a format and
 outputting to <ml>stderr</ml>:
 </p>
 <oc>let to_stderr fmt = Printf.ksprintf prerr_endline fmt;;</oc>
-<p>Note that our definition of <ml>log</ml> must have a parameter so
+<p>Note that our definition of <ml>to_sdterr</ml> must have a parameter
 for the <ml>format4</ml> type to be polymorphic.
 </p>
 <p>
@@ -168,7 +168,7 @@ the <ml>Taglog.Make</ml> functor.
 <p>
 In the case of the <ml>Error</ml> tag, we could choose to print it,
 no matter what the value of our condition option. To do so, we can
-extend the condition evaluation function to always return true if
+extend the condition evaluation function to always return <ml>true</ml> if
 the list of tags contains <ml>Error</ml>:
 </p>
 <oc>
@@ -178,7 +178,7 @@ T.extend_eval f ;;
 </oc>
 <p>Let's change our condition to print only messages regarding database
 but when Network is not concerned. Here we use the
-<ml>Taglog.Operators</ml> module to define more easily <ml>tag cond</ml>
+<ml>Taglog.Ops</ml> module to define more easily <ml>tag cond</ml>
 values:
 </p>
 <oc><![CDATA[Ocf.set cond_option (Some Taglog.Ops.(??Database && ~~ ??Network))]]>
@@ -191,7 +191,7 @@ log ~tags: [Database ; Network] "network error while querying database"
   (* not printed because or our condition does not accept Network *) ;;
 log ~tags: [Error] "Error in query %S" "SELECT ..."
   (* printed thanks to our extension to the evaluation function *);;
-log "Hello!" (* not printed since because no tags *);;
+log "Hello!" (* not printed because no tags *);;
 </oc>
 </section>
 
@@ -226,17 +226,18 @@ let tag_wrapper =
 let cond_opt_wrapper = Ocf.Wrapper.option (Taglog.cond_wrapper tag_wrapper);;
 let cond_option = Ocf.option cond_opt_wrapper (Some (Taglog.Tag Error))
 </oc>
-<p>Now we extend our <ml>tag</ml> type, change our condition option to use
-this tag, create a log function and test it:
-</p>
-<oc>type tag += UI [@@deriving yojson];;
-Ocf.set cond_option (Some Taglog.Ops.(??UI || ??Error));;
-</oc>
+<p>Let's create the module and the log function:</p>
 <oc toplevel="false">
 module T = Taglog.Make (struct type t = tag end)
 </oc>
 <oc>let log ?level = T.mk_fmt_log level_option cond_option to_stderr ?level</oc>
-<oc>log ~tags: [UI] "hello %s" "world" ;;
+<p>Now we extend our <ml>tag</ml> type, change our condition option to use
+this tag and test our <ml>log</ml> function, which did not change after
+the extension of the <ml>tag</ml> type:
+</p>
+<oc>type tag += UI [@@deriving yojson];;
+Ocf.set cond_option (Some Taglog.Ops.(??UI || ??Error));;
+log ~tags: [UI] "hello %s" "world" ;;
 log ~tags: [Database] "tried connected to database"
   (* not printed since only UI and Error messages are accepted *) ;;
 </oc>
