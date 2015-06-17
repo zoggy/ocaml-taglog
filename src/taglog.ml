@@ -63,10 +63,10 @@ let rec eval mem = function
 
 module Operators =
   struct
-    let (!?) t = Tag t
-    let (~?) c = Not c
-    let (|?|) c1 c2 = Or (c1, c2)
-    let (&?&) c1 c2 = And (c1, c2)
+    let (??) t = Tag t
+    let (~~) c = Not c
+    let (||) c1 c2 = Or (c1, c2)
+    let (&&) c1 c2 = And (c1, c2)
   end
 
 let ikprintf k x (CamlinternalFormatBasics.Format (fmt, _)) =
@@ -140,3 +140,4 @@ module Make(T:Set.OrderedType) : S with type tag = T.t =
       (fun ?level ?tags x -> f x)
 
   end
+

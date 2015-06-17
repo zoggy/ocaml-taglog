@@ -66,9 +66,9 @@ let test_levels () =
 
 let test_tags () =
   Ocf.set dump_cond
-    (Some Taglog.( (Tag Foo) |?|
-      (Tag Bar) &?& (~? (Tag Gee)))
-    );
+    (Some Taglog.Operators.(
+      ??Foo || ??Bar && (~~ ??Gee)
+    ));
   log ~tags: [Foo] "OK with tag Foo" ;
   log ~tags: [Bar] "OK with tag Bar" ;
   log ~tags: [Bar ; Foo] "OK with tags Bar and Foo" ;

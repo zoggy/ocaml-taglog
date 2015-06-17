@@ -28,17 +28,16 @@
 
 (** Logging facilities using tags and levels *)
 
-module W = Ocf.Wrapper
-
-(** Logical conditions on tags. *)
+(** Conditions on tags. *)
 type 'a cond =
     Tag of 'a
   | Not of 'a cond
   | Or of 'a cond * 'a cond
   | And of 'a cond * 'a cond
 
-(** Wrapper to create Ocf options. *)
-val cond_wrapper : 'a W.t -> 'a cond W.t
+(** [cond_wrapper wrapper] creates a ['a cond] wrapper for
+  Ocf options from a wrapper for ['a] values. *)
+val cond_wrapper : 'a Ocf.Wrapper.t -> 'a cond Ocf.Wrapper.t
 
 (** Generic evaluation of conditions.
   [eval mem cond] evaluates the condition [cond]. [mem]
@@ -47,17 +46,17 @@ val eval : ('a -> bool) -> 'a cond -> bool
 
 module Operators :
   sig
-    (** !? x => Tag x *)
-    val ( !? ) : 'a -> 'a cond
+    (** ?? x => Tag x *)
+    val ( ?? ) : 'a -> 'a cond
 
-    (** ~? x => Not x *)
-    val ( ~? ) : 'a cond -> 'a cond
+    (** ~~ x => Not x *)
+    val ( ~~ ) : 'a cond -> 'a cond
 
-    (** x |?| y => Or (x,y) *)
-    val ( |?| ) : 'a cond -> 'a cond -> 'a cond
+    (** x || y => Or (x,y) *)
+    val ( || ) : 'a cond -> 'a cond -> 'a cond
 
-    (** x &?& y => And (x,y) *)
-    val ( &?& ) : 'a cond -> 'a cond -> 'a cond
+    (** x && y => And (x,y) *)
+    val ( && ) : 'a cond -> 'a cond -> 'a cond
 
   end
 
