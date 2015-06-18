@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<title>Taglog reference documentation : Taglog.Make</title>
+<link href="https://zoggy.github.io/ocaml-taglog/style.css" rel="stylesheet" type="text/css"/>
+<link href="/https://zoggy.github.io/ocaml-taglog/news.rss" rel="alternate" title="Rss feed" type="application/rss+xml"/>
+</head>
+<body>
+<div id="page">
+<div class="navbar">
+<div class="navbar-inner">
+  <ul class="nav">
+    <li class="&lt;navbar-home/&gt;"><a href="https://zoggy.github.io/ocaml-taglog/">Taglog</a></li>
+    <li class="&lt;navbar-download/&gt;"><a href="https://zoggy.github.io/ocaml-taglog/download.html">Download/Install</a></li>
+    <li class="active"><a href="https://zoggy.github.io/ocaml-taglog/doc.html">Documentation</a></li>
+    <li class="&lt;navbar-blog/&gt;"><a href="https://zoggy.github.io/ocaml-taglog/blog.html">Blog</a></li>
+    <li class="&lt;navbar-about/&gt;"><a href="https://zoggy.github.io/ocaml-taglog/about.html">?</a></li>
+  </ul>
+</div>
+</div>
+
+<div id="header">
+
+</div>
+<div id="page-body">
+
+
+<div class="ocamldoc-page">
+<code class="code"><span class="keyword">functor</span> (<span class="constructor">T</span> : <span class="constructor">P</span>) <span class="keywordsign">-&gt;</span><br/>
+  <span class="keyword">sig</span><br/>
+    <span class="keyword">type</span> tag = <span class="constructor">T</span>.t<br/>
+    <span class="keyword">val</span> extend_eval :<br/>
+      ((tag list <span class="keywordsign">-&gt;</span> tag cond <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span> tag list <span class="keywordsign">-&gt;</span> tag cond <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span><br/>
+      unit<br/>
+    <span class="keyword">val</span> mk :<br/>
+      (<span class="keywordsign">'</span>a <span class="keywordsign">-&gt;</span> <span class="keywordsign">'</span>b) <span class="keywordsign">-&gt;</span><br/>
+      int <span class="constructor">Ocf</span>.conf_option <span class="keywordsign">-&gt;</span><br/>
+      tag cond option <span class="constructor">Ocf</span>.conf_option <span class="keywordsign">-&gt;</span><br/>
+      (?level:int <span class="keywordsign">-&gt;</span> ?tags:tag list <span class="keywordsign">-&gt;</span> <span class="keywordsign">'</span>a <span class="keywordsign">-&gt;</span> <span class="keywordsign">'</span>b) <span class="keywordsign">-&gt;</span><br/>
+      ?level:int <span class="keywordsign">-&gt;</span> ?tags:tag list <span class="keywordsign">-&gt;</span> <span class="keywordsign">'</span>a <span class="keywordsign">-&gt;</span> <span class="keywordsign">'</span>b<br/>
+    <span class="keyword">val</span> mk_log :<br/>
+      int <span class="constructor">Ocf</span>.conf_option <span class="keywordsign">-&gt;</span><br/>
+      tag cond option <span class="constructor">Ocf</span>.conf_option <span class="keywordsign">-&gt;</span><br/>
+      (?level:int <span class="keywordsign">-&gt;</span> ?tags:tag list <span class="keywordsign">-&gt;</span> (<span class="keywordsign">'</span>a, unit, <span class="keywordsign">'</span>b, unit) format4 <span class="keywordsign">-&gt;</span> <span class="keywordsign">'</span>a) <span class="keywordsign">-&gt;</span><br/>
+      ?level:int <span class="keywordsign">-&gt;</span> ?tags:tag list <span class="keywordsign">-&gt;</span> (<span class="keywordsign">'</span>a, unit, <span class="keywordsign">'</span>b, unit) format4 <span class="keywordsign">-&gt;</span> <span class="keywordsign">'</span>a<br/>
+    <span class="keyword">val</span> mk_fmt_log :<br/>
+      int <span class="constructor">Ocf</span>.conf_option <span class="keywordsign">-&gt;</span><br/>
+      tag cond option <span class="constructor">Ocf</span>.conf_option <span class="keywordsign">-&gt;</span><br/>
+      ((<span class="keywordsign">'</span>a, unit, <span class="keywordsign">'</span>b, unit) format4 <span class="keywordsign">-&gt;</span> <span class="keywordsign">'</span>a) <span class="keywordsign">-&gt;</span><br/>
+      ?level:int <span class="keywordsign">-&gt;</span> ?tags:tag list <span class="keywordsign">-&gt;</span> (<span class="keywordsign">'</span>a, unit, <span class="keywordsign">'</span>b, unit) format4 <span class="keywordsign">-&gt;</span> <span class="keywordsign">'</span>a<br/>
+    <span class="keyword">val</span> mk_str_log :<br/>
+      int <span class="constructor">Ocf</span>.conf_option <span class="keywordsign">-&gt;</span><br/>
+      tag cond option <span class="constructor">Ocf</span>.conf_option <span class="keywordsign">-&gt;</span><br/>
+      (string <span class="keywordsign">-&gt;</span> unit) <span class="keywordsign">-&gt;</span> ?level:int <span class="keywordsign">-&gt;</span> ?tags:tag list <span class="keywordsign">-&gt;</span> string <span class="keywordsign">-&gt;</span> unit<br/>
+  <span class="keyword">end</span></code></div>
+
+
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<title>Taglog : Documentation</title>
+<link href="https://zoggy.github.io/ocaml-taglog/style.css" rel="stylesheet" type="text/css"/>
+<link href="/https://zoggy.github.io/ocaml-taglog/news.rss" rel="alternate" title="Rss feed" type="application/rss+xml"/>
+</head>
+<body>
+<div id="page">
+<div class="navbar">
+<div class="navbar-inner">
+  <ul class="nav">
+    <li class="&lt;navbar-home/&gt;"><a href="https://zoggy.github.io/ocaml-taglog/">Taglog</a></li>
+    <li class="&lt;navbar-download/&gt;"><a href="https://zoggy.github.io/ocaml-taglog/download.html">Download/Install</a></li>
+    <li class="active"><a href="https://zoggy.github.io/ocaml-taglog/doc.html">Documentation</a></li>
+    <li class="&lt;navbar-blog/&gt;"><a href="https://zoggy.github.io/ocaml-taglog/blog.html">Blog</a></li>
+    <li class="&lt;navbar-about/&gt;"><a href="https://zoggy.github.io/ocaml-taglog/about.html">?</a></li>
+  </ul>
+</div>
+</div>
+
+<div id="header">
+<div class="page-title">Documentation</div>
+</div>
+<div id="page-body">
+
+
+
+
+<p id="Readthereferencedocument"><a class="paragraph-url" href="#Readthereferencedocument"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+Read the <a href="https://zoggy.github.io/ocaml-taglog/refdoc/Taglog.html">reference documentation</a>.
+</p>
+
+<p id="Belowisaguidedtourofthel"><a class="paragraph-url" href="#Belowisaguidedtourofthel"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a> Below is a guided tour of the library through examples. </p>
+
+<ul class="toc"><li class="toc-section"><a href="https://zoggy.github.io/ocaml-taglog/doc.html#intro">Introduction</a></li><li class="toc-section"><a href="https://zoggy.github.io/ocaml-taglog/doc.html#tags">Defining tags</a></li><li class="toc-section"><a href="https://zoggy.github.io/ocaml-taglog/doc.html#applyfunctor">Applying <span class="icode"><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="hl kwc">Make</span></span></a></li><li class="toc-section"><a href="https://zoggy.github.io/ocaml-taglog/doc.html#createlog">Creating and using log functions</a></li><li class="toc-section"><a href="https://zoggy.github.io/ocaml-taglog/doc.html#examples">More fun</a></li><li class="toc-section"><a href="https://zoggy.github.io/ocaml-taglog/doc.html#opentags">Using open tags</a></li></ul>
+<div class="section"><div class="section-title" id="intro">Introduction</div>
+<p id="Aclassicalwaytohandlelog"><a class="paragraph-url" href="#Aclassicalwaytohandlelog"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+A classical way to handle log of messages in an application is
+to have a configuration option set a log level, and a log function
+having a <span class="icode"><span class="">level</span></span> parameter. At each call,
+the <span class="icode"><span class="">level</span></span> parameter of the function is compared to the
+level in the configuration option and if the parameter is less than
+or equal to the option value, then the message is output. Levels
+can even have names like &quot;Debug&quot;, &quot;Critical&quot;, &quot;Warning&quot;, ...
+</p>
+<p id="Thisapproachisusefulbuts"><a class="paragraph-url" href="#Thisapproachisusefulbuts"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+This approach is useful but setting the log level to &quot;Debug&quot; in an
+application can result in having a lot of messages from all the
+parts of an application while looking for what's going on only in
+one part of the application (for example database access, user interface,
+networking, ...).
+</p>
+<p id="TheTagloglibraryprovides"><a class="paragraph-url" href="#TheTagloglibraryprovides"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+The Taglog library provides a way to handle both log levels and
+conditions based on tags. The log functions take as parameters the
+log level, as usual, but also a list of tags. These tags are values
+of an OCaml type defined in the application. These tags will
+be constructors of a variant type, for example:
+</p>
+<pre class="code-ocaml" id="typetagDatabaseNetworkin"><a class="paragraph-url" href="#typetagDatabaseNetworkin"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span class="hl kwa">type</span><span class="hl std"> </span><span class="">tag</span><span class="hl std"> = </span><span class="hl kwc">Database</span><span class="hl std"> | </span><span class="hl kwc">Networking</span><span class="hl std"> | ...</span></pre>
+<p id="Thetagsprovidedwhencalli"><a class="paragraph-url" href="#Thetagsprovidedwhencalli"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+The tags provided when calling the log functions are used to
+evaluate a condition, stored in an option as is the log level.
+This condition is a logical expression of type <span class="icode"><span class="hl std">'</span><span class="">a</span><span class="hl std"> </span><span class="">cond</span></span>,
+<span class="icode"><span class="hl std">'</span><span class="">a</span></span> being the type of tags:
+</p>
+<pre class="code-ocaml" id="typeacondTagofatrueifthe"><a class="paragraph-url" href="#typeacondTagofatrueifthe"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span class="hl kwa">type</span><span class="hl std"> '</span><span class="">a</span><span class="hl std"> </span><span class="">cond</span><span class="hl std"> =
+  | </span><span class="hl kwc">Tag</span><span class="hl std"> </span><span class="hl kwa">of</span><span class="hl std"> '</span><span class="">a</span><span class="hl std"> </span><span class="hl com">(** true if the tag is present *)</span><span class="hl std">
+  | </span><span class="hl kwc">Not</span><span class="hl std"> </span><span class="hl kwa">of</span><span class="hl std"> '</span><span class="">a</span><span class="hl std"> </span><span class="">cond</span><span class="hl std">  </span><span class="hl com">(** logical not *)</span><span class="hl std">
+  | </span><span class="hl kwc">Or</span><span class="hl std"> </span><span class="hl kwa">of</span><span class="hl std"> '</span><span class="">a</span><span class="hl std"> </span><span class="">cond</span><span class="hl std"> * '</span><span class="">a</span><span class="hl std"> </span><span class="">cond</span><span class="hl std">  </span><span class="hl com">(** logical or *)</span><span class="hl std">
+  | </span><span class="hl kwc">And</span><span class="hl std"> </span><span class="hl kwa">of</span><span class="hl std"> '</span><span class="">a</span><span class="hl std"> </span><span class="">cond</span><span class="hl std"> * '</span><span class="">a</span><span class="hl std"> </span><span class="">cond</span><span class="hl std">  </span><span class="hl com">(** logicial and *)</span><span class="hl std">
+</span></pre>
+<p id="Whenthelogfunctionsarepa"><a class="paragraph-url" href="#Whenthelogfunctionsarepa"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+When the log functions are passed a message, it will be
+ignored if the given level is stricly higher than the log
+level in the associated option or if the condition (also stored
+in a configuration option) evaluates to <span class="icode"><span class="hl num">false</span></span> with the
+given list of tags.
+</p>
+<p id="TaglogusedOcftohandlecon"><a class="paragraph-url" href="#TaglogusedOcftohandlecon"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+Taglog used <span class="ext-a"><a href="https://zoggy.github.io/ocf/">Ocf</a></span>
+to handle configuration options and provides functions to create
+such options.
+</p>
+<p id="Letsseesomeexamplesofusa"><a class="paragraph-url" href="#Letsseesomeexamplesofusa"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+Let's see some examples of usage.
+</p>
+</div>
+<div class="section"><div class="section-title" id="tags">Defining tags</div>
+<p id="Thefirstthingtodoistodef"><a class="paragraph-url" href="#Thefirstthingtodoistodef"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+The first thing to do is to define a type to represent tags.
+</p>
+
+<pre class="code-ocaml" id="typetagDatabaseErrorNetw"><a class="paragraph-url" href="#typetagDatabaseErrorNetw"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="hl kwa">type</span><span class="hl std"> </span><span class="">tag</span><span class="hl std"> = </span><span class="hl kwc">Database</span><span class="hl std"> | </span><span class="hl kwc">Error</span><span class="hl std"> | </span><span class="hl kwc">Network</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">type tag = Database | Error | Network
+</div></div></pre>
+
+<p id="Tostoreaconditiononthese"><a class="paragraph-url" href="#Tostoreaconditiononthese"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+To store a condition on these tags in an Ocf option, we have to
+define a wrapper for our <span class="icode"><span class="">tag</span></span> type, which is a JSON
+encoder/decoder. Here is a simple way to do it<sup class="footnote-link" id="source_note_1"><a href="#target_note_1">1</a></sup>:
+</p>
+
+<pre class="code-ocaml" id="lettag_wrapperletto_jfun"><a class="paragraph-url" href="#lettag_wrapperletto_jfun"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">tag_wrapper</span><span class="hl std"> =
+  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">to_j</span><span class="hl std"> = </span><span class="hl kwa">function</span><span class="hl std">
+  | </span><span class="hl kwc">Database</span><span class="hl std"> -&gt; `</span><span class="hl kwc">String</span><span class="hl std"> </span><span class="hl str">&quot;database&quot;</span><span class="hl std">
+  | </span><span class="hl kwc">Error</span><span class="hl std"> -&gt; `</span><span class="hl kwc">String</span><span class="hl std"> </span><span class="hl str">&quot;error&quot;</span><span class="hl std">
+  | </span><span class="hl kwc">Network</span><span class="hl std"> -&gt; `</span><span class="hl kwc">String</span><span class="hl std"> </span><span class="hl str">&quot;network&quot;</span><span class="hl std">
+  </span><span class="hl kwa">in</span><span class="hl std">
+  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">from_j</span><span class="hl std"> ?</span><span class="">def</span><span class="hl std"> (</span><span class="">json</span><span class="hl std"> : </span><span class="hl kwc">Yojson</span><span class="hl std">.</span><span class="hl kwc">Safe</span><span class="hl std">.</span><span class="">json</span><span class="hl std">) =
+    </span><span class="hl kwb">match</span><span class="hl std"> </span><span class="">json</span><span class="hl std"> </span><span class="hl kwb">with</span><span class="hl std">
+    | `</span><span class="hl kwc">String</span><span class="hl std"> </span><span class="">s</span><span class="hl std"> -&gt;
+      </span><span class="hl kwb">begin</span><span class="hl std">
+        </span><span class="hl kwb">match</span><span class="hl std"> </span><span class="hl kwc">String</span><span class="hl std">.</span><span class="">lowercase</span><span class="hl std"> </span><span class="">s</span><span class="hl std"> </span><span class="hl kwb">with</span><span class="hl std">
+        | </span><span class="hl str">&quot;database&quot;</span><span class="hl std"> -&gt; </span><span class="hl kwc">Database</span><span class="hl std">
+        | </span><span class="hl str">&quot;error&quot;</span><span class="hl std"> -&gt; </span><span class="hl kwc">Error</span><span class="hl std">
+        | </span><span class="hl str">&quot;network&quot;</span><span class="hl std"> -&gt; </span><span class="hl kwc">Network</span><span class="hl std">
+        | </span><span class="hl num">_</span><span class="hl std"> -&gt; </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">invalid_value</span><span class="hl std"> </span><span class="">json</span><span class="hl std">
+      </span><span class="hl kwb">end</span><span class="hl std">
+    | </span><span class="hl num">_</span><span class="hl std"> -&gt; </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">invalid_value</span><span class="hl std"> </span><span class="">json</span><span class="hl std">
+  </span><span class="hl kwa">in</span><span class="hl std">
+  </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="hl kwc">Wrapper</span><span class="hl std">.</span><span class="">make</span><span class="hl std"> </span><span class="">to_j</span><span class="hl std"> </span><span class="">from_j</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">val tag_wrapper : tag Ocf.Wrapper.t =
+  {Ocf.Wrapper.to_json = &lt;fun&gt;; from_json = &lt;fun&gt;}
+</div></div></pre>
+
+<p id="TocreateanOcfconfigurati"><a class="paragraph-url" href="#TocreateanOcfconfigurati"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+To create an Ocf configuration option, we need to create a wrapper
+for values of type <span class="icode"><span class="">tag</span><span class="hl std"> </span><span class="">cond</span><span class="hl std"> </span><span class="">option</span></span>, as the the condition
+is optional (no condition will mean that the log functions will
+not use the provided tags to determine whether to ignore the
+message). We do so by combining our tag wrapper,
+<span class="icode"><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="">cond_wrapper</span></span> and <span class="icode"><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="hl kwc">Wrapper</span><span class="hl std">.</span><span class="">option</span></span>:
+</p>
+
+<pre class="code-ocaml" id="letcond_opt_wrapperOcfWr"><a class="paragraph-url" href="#letcond_opt_wrapperOcfWr"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">cond_opt_wrapper</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="hl kwc">Wrapper</span><span class="hl std">.</span><span class="">option</span><span class="hl std"> (</span><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="">cond_wrapper</span><span class="hl std"> </span><span class="">tag_wrapper</span><span class="hl std">);;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">val cond_opt_wrapper : tag Taglog.cond option Ocf.Wrapper.t =
+  {Ocf.Wrapper.to_json = &lt;fun&gt;; from_json = &lt;fun&gt;}
+</div></div></pre>
+
+<p id="Thenwecancreateaconfigur"><a class="paragraph-url" href="#Thenwecancreateaconfigur"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>Then we can create a configuration option with this wrapper,
+with a default condition to log only messages tagged with
+<span class="icode"><span class="hl kwc">Error</span></span>:
+</p>
+
+<pre class="code-ocaml" id="letcond_optionOcfoptionc"><a class="paragraph-url" href="#letcond_optionOcfoptionc"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">cond_option</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">option</span><span class="hl std"> </span><span class="">cond_opt_wrapper</span><span class="hl std"> (</span><span class="hl kwc">Some</span><span class="hl std"> (</span><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="hl kwc">Tag</span><span class="hl std"> </span><span class="hl kwc">Error</span><span class="hl std">));;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">val cond_option : tag Taglog.cond option Ocf.conf_option = &lt;abstr&gt;
+</div></div></pre>
+
+</div>
+
+<div class="section"><div class="section-title" id="applyfunctor">Applying <span class="icode"><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="hl kwc">Make</span></span></div>
+<p id="Nowthatourtagtypeisdefin"><a class="paragraph-url" href="#Nowthatourtagtypeisdefin"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+Now that our <span class="icode"><span class="">tag</span></span> type is defined, we can apply
+the <span class="icode"><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="hl kwc">Make</span></span> module:
+</p>
+
+<pre class="code-ocaml" id="moduleTTaglogMakestructt"><a class="paragraph-url" href="#moduleTTaglogMakestructt"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div><span class="hl kwa">module</span><span class="hl std"> </span><span class="hl kwc">T</span><span class="hl std"> = </span><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="hl kwc">Make</span><span class="hl std"> (</span><span class="hl kwb">struct</span><span class="hl std"> </span><span class="hl kwa">type</span><span class="hl std"> </span><span class="">t</span><span class="hl std"> = </span><span class="">tag</span><span class="hl std"> </span><span class="hl kwb">end</span><span class="hl std">);;</span></div></pre>
+
+<p id="TheresultingTmoduleconta"><a class="paragraph-url" href="#TheresultingTmoduleconta"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+The resulting <span class="icode"><span class="hl kwc">T</span></span> module contains functions to create log
+functions which use our tags.
+</p>
+</div>
+
+<div class="section"><div class="section-title" id="createlog">Creating and using log functions</div>
+<p id="Letsdefineasimplefunctio"><a class="paragraph-url" href="#Letsdefineasimplefunctio"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+Let's define a simple function taking a format and
+outputting to <span class="icode"><span class="">stderr</span></span>:
+</p>
+
+<pre class="code-ocaml" id="letto_stderrfmtPrintfksp"><a class="paragraph-url" href="#letto_stderrfmtPrintfksp"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">to_stderr</span><span class="hl std"> </span><span class="">fmt</span><span class="hl std"> = </span><span class="hl kwc">Printf</span><span class="hl std">.</span><span class="">ksprintf</span><span class="hl std"> </span><span class="">prerr_endline</span><span class="hl std"> </span><span class="">fmt</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">val to_stderr : ('a, unit, string, unit) format4 -&gt; 'a = &lt;fun&gt;
+</div></div></pre>
+
+<p id="Notethatourdefinitionoft"><a class="paragraph-url" href="#Notethatourdefinitionoft"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>Note that our definition of <span class="icode"><span class="">to_sdterr</span></span> must have a parameter
+for the <span class="icode"><span class="">format4</span></span> type to be polymorphic.
+</p>
+<p id="Tocreatealogfunctionhand"><a class="paragraph-url" href="#Tocreatealogfunctionhand"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+To create a log function handling log level and conditions, we
+first have to create a log level configuration option, with
+default value <span class="icode"><span class="hl num">0</span></span>:
+</p>
+
+<pre class="code-ocaml" id="letlevel_optionOcfint0va"><a class="paragraph-url" href="#letlevel_optionOcfint0va"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">level_option</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="hl kwd">int</span><span class="hl std"> </span><span class="hl num">0</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">val level_option : int Ocf.conf_option = &lt;abstr&gt;
+</div></div></pre>
+
+<p id="ThenwecasuseTaglogmk_fmt"><a class="paragraph-url" href="#ThenwecasuseTaglogmk_fmt"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+Then we cas use <span class="icode"><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="">mk_fmt_log</span></span> to create a log function:
+</p>
+
+<pre class="code-ocaml" id="letloglevelTmk_fmt_logle"><a class="paragraph-url" href="#letloglevelTmk_fmt_logle"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">log</span><span class="hl std"> ?</span><span class="">level</span><span class="hl std"> = </span><span class="hl kwc">T</span><span class="hl std">.</span><span class="">mk_fmt_log</span><span class="hl std"> </span><span class="">level_option</span><span class="hl std"> </span><span class="">cond_option</span><span class="hl std"> </span><span class="">to_stderr</span><span class="hl std"> ?</span><span class="">level</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">val log :
+  ?level:int -&gt; ?tags:T.tag list -&gt; ('a, unit, string, unit) format4 -&gt; 'a =
+  &lt;fun&gt;
+</div></div></pre>
+
+<p id="Weobtainafunctionwiththe"><a class="paragraph-url" href="#Weobtainafunctionwiththe"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a> We obtain a function with the expected type, let's test it:
+</p>
+
+<pre class="code-ocaml" id="logHellosworldunitlogddd"><a class="paragraph-url" href="#logHellosworldunitlogddd"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="">log</span><span class="hl std"> </span><span class="hl str">&quot;Hello %s !&quot;</span><span class="hl std"> </span><span class="hl str">&quot;world&quot;</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
+</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl str">&quot;%d + %d = %d&quot;</span><span class="hl std"> </span><span class="hl num">1</span><span class="hl std"> </span><span class="hl num">1</span><span class="hl std"> </span><span class="hl num">2</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
+</div></div></pre>
+
+<p id="Ofcoursenothingisprinted"><a class="paragraph-url" href="#Ofcoursenothingisprinted"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>Of course nothing is printed as our condition option (stored in
+<span class="icode"><span class="">cond_option</span></span>) specifies that only messages with tag <span class="icode"><span class="hl kwc">Error</span></span>
+should be printed. Let's tag our messages:
+</p>
+
+<pre class="code-ocaml" id="logtagsErrorHellosworldH"><a class="paragraph-url" href="#logtagsErrorHellosworldH"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Error</span><span class="hl std">] </span><span class="hl str">&quot;Hello %s !&quot;</span><span class="hl std"> </span><span class="hl str">&quot;world&quot;</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="stderr">Hello world !
+</div><div class="toplevel-out">- : unit = ()
+</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Error</span><span class="hl std"> ; </span><span class="hl kwc">Database</span><span class="hl std">] </span><span class="hl str">&quot;%d + %d = %d&quot;</span><span class="hl std"> </span><span class="hl num">1</span><span class="hl std"> </span><span class="hl num">1</span><span class="hl std"> </span><span class="hl num">2</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="stderr">1 + 1 = 2
+</div><div class="toplevel-out">- : unit = ()
+</div></div></pre>
+
+<p id="Othermkfunctionsareprovi"><a class="paragraph-url" href="#Othermkfunctionsareprovi"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+Other <span class="icode"><span class="">mk</span><span class="hl std">*</span></span> functions are provided in the module obtained with
+the <span class="icode"><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="hl kwc">Make</span></span> functor.
+</p>
+</div>
+
+<div class="section"><div class="section-title" id="examples">More fun</div>
+<p id="InthecaseoftheErrortagwe"><a class="paragraph-url" href="#InthecaseoftheErrortagwe"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+In the case of the <span class="icode"><span class="hl kwc">Error</span></span> tag, we could choose to print it,
+no matter what the value of our condition option. To do so, we can
+extend the condition evaluation function to always return <span class="icode"><span class="hl num">true</span></span> if
+the list of tags contains <span class="icode"><span class="hl kwc">Error</span></span>:
+</p>
+
+<pre class="code-ocaml" id="letffallbacktagscondList"><a class="paragraph-url" href="#letffallbacktagscondList"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">f</span><span class="hl std"> </span><span class="">fallback</span><span class="hl std"> </span><span class="">tags</span><span class="hl std"> </span><span class="">cond</span><span class="hl std"> =
+  (</span><span class="hl kwc">List</span><span class="hl std">.</span><span class="">mem</span><span class="hl std"> </span><span class="hl kwc">Error</span><span class="hl std"> </span><span class="">tags</span><span class="hl std">) || </span><span class="">fallback</span><span class="hl std"> </span><span class="">tags</span><span class="hl std"> </span><span class="">cond</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">val f : (tag list -&gt; 'a -&gt; bool) -&gt; tag list -&gt; 'a -&gt; bool = &lt;fun&gt;
+</div></div><div># <span class="hl kwc">T</span><span class="hl std">.</span><span class="">extend_eval</span><span class="hl std"> </span><span class="">f</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
+</div></div></pre>
+
+<p id="Letschangeourconditionto"><a class="paragraph-url" href="#Letschangeourconditionto"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>Let's change our condition to print only messages regarding database
+but when Network is not concerned. Here we use the
+<span class="icode"><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="hl kwc">Ops</span></span> module to define more easily <span class="icode"><span class="">tag</span><span class="hl std"> </span><span class="">cond</span></span>
+values:
+</p>
+
+<pre class="code-ocaml" id="Ocfsetcond_optionSomeTag"><a class="paragraph-url" href="#Ocfsetcond_optionSomeTag"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">set</span><span class="hl std"> </span><span class="">cond_option</span><span class="hl std"> (</span><span class="hl kwc">Some</span><span class="hl std"> </span><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="hl kwc">Ops</span><span class="hl std">.(??</span><span class="hl kwc">Database</span><span class="hl std"> &amp;&amp; ~~ ??</span><span class="hl kwc">Network</span><span class="hl std">));;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
+</div></div></pre>
+
+<p id="Nowletsseewhathappenswhe"><a class="paragraph-url" href="#Nowletsseewhathappenswhe"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>Now let's see what happens when we call our <span class="icode"><span class="">log</span></span> function
+in various ways:</p>
+
+<pre class="code-ocaml" id="logtagsDatabasemessageab"><a class="paragraph-url" href="#logtagsDatabasemessageab"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Database</span><span class="hl std">] </span><span class="hl str">&quot;message about database&quot;</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="stderr">message about database
+</div><div class="toplevel-out">- : unit = ()
+</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Database</span><span class="hl std"> ; </span><span class="hl kwc">Network</span><span class="hl std">] </span><span class="hl str">&quot;network error while querying database&quot;</span><span class="hl std">
+  </span><span class="hl com">(* not printed because or our condition does not accept Network *)</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
+</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Error</span><span class="hl std">] </span><span class="hl str">&quot;Error in query %S&quot;</span><span class="hl std"> </span><span class="hl str">&quot;SELECT ...&quot;</span><span class="hl std">
+  </span><span class="hl com">(* printed thanks to our extension to the evaluation function *)</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="stderr">Error in query &quot;SELECT ...&quot;
+</div><div class="toplevel-out">- : unit = ()
+</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl str">&quot;Hello!&quot;</span><span class="hl std"> </span><span class="hl com">(* not printed because no tags *)</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
+</div></div></pre>
+
+</div>
+
+<div class="section"><div class="section-title" id="opentags">Using open tags</div>
+<p id="Thetagtypecanbeanopentyp"><a class="paragraph-url" href="#Thetagtypecanbeanopentyp"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+The <span class="icode"><span class="">tag</span></span> type can be an open type with a definition like:
+</p>
+
+<pre class="code-ocaml" id="typetagtypetagtypetagDat"><a class="paragraph-url" href="#typetagtypetagtypetagDat"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="hl kwa">type</span><span class="hl std"> </span><span class="">tag</span><span class="hl std"> = .. ;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">type tag = ..
+</div></div><div># <span class="hl kwa">type</span><span class="hl std"> </span><span class="">tag</span><span class="hl std"> += </span><span class="hl kwc">Database</span><span class="hl std"> | </span><span class="hl kwc">Error</span><span class="hl std"> | </span><span class="hl kwc">Network</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">type tag += Database | Error | Network
+</div></div></pre>
+
+<p id="Inthiscaseadditionaltags"><a class="paragraph-url" href="#Inthiscaseadditionaltags"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+In this case, additional tags can be added by modules, even dynamically loaded
+modules. These modules can then use the same log function. The condition
+option can contain such additonal tags. What has to be done to load and store
+the condition is to extend the tag wrapper.
+<span class="ext-a"><a href="https://github.com/whitequark/ppx_deriving_yojson/">ppx_deriving_yojson</a></span> is able to handle such open types and extend the JSON wrappers.
+</p>
+<p id="Hereisanexample"><a class="paragraph-url" href="#Hereisanexample"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>Here is an example:</p>
+
+<pre class="code-ocaml" id="typetagderivingyojsontyp"><a class="paragraph-url" href="#typetagderivingyojsontyp"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div><span class="hl kwa">type</span><span class="hl std"> </span><span class="">tag</span><span class="hl std"> = .. [@@</span><span class="">deriving</span><span class="hl std"> </span><span class="">yojson</span><span class="hl std">] ;;</span></div><div><span class="hl kwa">type</span><span class="hl std"> </span><span class="">tag</span><span class="hl std"> += </span><span class="hl kwc">Database</span><span class="hl std"> | </span><span class="hl kwc">Error</span><span class="hl std"> | </span><span class="hl kwc">Network</span><span class="hl std"> [@@</span><span class="">deriving</span><span class="hl std"> </span><span class="">yojson</span><span class="hl std">] ;;</span></div></pre>
+
+
+<pre class="code-ocaml" id="lettag_wrapperletto_tag_"><a class="paragraph-url" href="#lettag_wrapperletto_tag_"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">tag_wrapper</span><span class="hl std"> =
+  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">to_</span><span class="hl std"> = </span><span class="">tag_to_yojson</span><span class="hl std"> </span><span class="hl kwa">in</span><span class="hl std">
+  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">of_</span><span class="hl std"> ?</span><span class="">def</span><span class="hl std"> </span><span class="">x</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="hl kwc">Wrapper</span><span class="hl std">.</span><span class="">of_ok_error</span><span class="hl std"> </span><span class="">tag_of_yojson</span><span class="hl std"> </span><span class="">x</span><span class="hl std"> </span><span class="hl kwa">in</span><span class="hl std">
+  </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="hl kwc">Wrapper</span><span class="hl std">.</span><span class="">make</span><span class="hl std"> </span><span class="">to_</span><span class="hl std"> </span><span class="">of_</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">val tag_wrapper : tag Ocf.Wrapper.t =
+  {Ocf.Wrapper.to_json = &lt;fun&gt;; from_json = &lt;fun&gt;}
+</div></div><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">cond_opt_wrapper</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="hl kwc">Wrapper</span><span class="hl std">.</span><span class="">option</span><span class="hl std"> (</span><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="">cond_wrapper</span><span class="hl std"> </span><span class="">tag_wrapper</span><span class="hl std">);;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">val cond_opt_wrapper : tag Taglog.cond option Ocf.Wrapper.t =
+  {Ocf.Wrapper.to_json = &lt;fun&gt;; from_json = &lt;fun&gt;}
+</div></div><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">cond_option</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">option</span><span class="hl std"> </span><span class="">cond_opt_wrapper</span><span class="hl std"> (</span><span class="hl kwc">Some</span><span class="hl std"> (</span><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="hl kwc">Tag</span><span class="hl std"> </span><span class="hl kwc">Error</span><span class="hl std">));;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">val cond_option : tag Taglog.cond option Ocf.conf_option = &lt;abstr&gt;
+</div></div></pre>
+
+<p id="Letscreatethemoduleandth"><a class="paragraph-url" href="#Letscreatethemoduleandth"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>Let's create the module and the log function:</p>
+
+<pre class="code-ocaml"><div><span class="hl kwa">module</span><span class="hl std"> </span><span class="hl kwc">T</span><span class="hl std"> = </span><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="hl kwc">Make</span><span class="hl std"> (</span><span class="hl kwb">struct</span><span class="hl std"> </span><span class="hl kwa">type</span><span class="hl std"> </span><span class="">t</span><span class="hl std"> = </span><span class="">tag</span><span class="hl std"> </span><span class="hl kwb">end</span><span class="hl std">);;</span></div></pre>
+
+
+<pre class="code-ocaml"><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">log</span><span class="hl std"> ?</span><span class="">level</span><span class="hl std"> = </span><span class="hl kwc">T</span><span class="hl std">.</span><span class="">mk_fmt_log</span><span class="hl std"> </span><span class="">level_option</span><span class="hl std"> </span><span class="">cond_option</span><span class="hl std"> </span><span class="">to_stderr</span><span class="hl std"> ?</span><span class="">level</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">val log :
+  ?level:int -&gt; ?tags:T.tag list -&gt; ('a, unit, string, unit) format4 -&gt; 'a =
+  &lt;fun&gt;
+</div></div></pre>
+
+<p id="Nowweextendourtagtypecha"><a class="paragraph-url" href="#Nowweextendourtagtypecha"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>Now we extend our <span class="icode"><span class="">tag</span></span> type, change our condition option to use
+this tag and test our <span class="icode"><span class="">log</span></span> function, which did not change after
+the extension of the <span class="icode"><span class="">tag</span></span> type:
+</p>
+
+<pre class="code-ocaml" id="typetagUIderivingyojsont"><a class="paragraph-url" href="#typetagUIderivingyojsont"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="hl kwa">type</span><span class="hl std"> </span><span class="">tag</span><span class="hl std"> += </span><span class="hl kwc">UI</span><span class="hl std"> [@@</span><span class="">deriving</span><span class="hl std"> </span><span class="">yojson</span><span class="hl std">];;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">type tag += UI
+</div></div><div># <span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">set</span><span class="hl std"> </span><span class="">cond_option</span><span class="hl std"> (</span><span class="hl kwc">Some</span><span class="hl std"> </span><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="hl kwc">Ops</span><span class="hl std">.(??</span><span class="hl kwc">UI</span><span class="hl std"> || ??</span><span class="hl kwc">Error</span><span class="hl std">));;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
+</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">UI</span><span class="hl std">] </span><span class="hl str">&quot;hello %s&quot;</span><span class="hl std"> </span><span class="hl str">&quot;world&quot;</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="stderr">hello world
+</div><div class="toplevel-out">- : unit = ()
+</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Database</span><span class="hl std">] </span><span class="hl str">&quot;tried connected to database&quot;</span><span class="hl std">
+  </span><span class="hl com">(* not printed since only UI and Error messages are accepted *)</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
+</div></div></pre>
+
+<p id="Wecanalsoseethatthetagwr"><a class="paragraph-url" href="#Wecanalsoseethatthetagwr"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+We can also see that the tag wrapper was automatically extended by
+the ppx_deriving_yojson extension, so that we can load or
+store our condition:
+</p>
+
+<pre class="code-ocaml" id="letletgOcfaddOcfgroupcon"><a class="paragraph-url" href="#letletgOcfaddOcfgroupcon"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><div># <span class="hl kwa">let</span><span class="hl std"> () =
+  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">g</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">add</span><span class="hl std"> </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">group</span><span class="hl std"> [</span><span class="hl str">&quot;condition&quot;</span><span class="hl std">] </span><span class="">cond_option</span><span class="hl std"> </span><span class="hl kwa">in</span><span class="hl std">
+  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">g</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">add</span><span class="hl std"> </span><span class="">g</span><span class="hl std"> [</span><span class="hl str">&quot;level&quot;</span><span class="hl std">] </span><span class="">level_option</span><span class="hl std"> </span><span class="hl kwa">in</span><span class="hl std">
+  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">g</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">add_group</span><span class="hl std"> </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">group</span><span class="hl std"> [</span><span class="hl str">&quot;log&quot;</span><span class="hl std">] </span><span class="">g</span><span class="hl std"> </span><span class="hl kwa">in</span><span class="hl std">
+  </span><span class="">print_endline</span><span class="hl std"> (</span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">to_string</span><span class="hl std"> </span><span class="">g</span><span class="hl std">);;</span></div><div class="ocaml-toplevel"><div class="stdout">{ &quot;log&quot;: { &quot;level&quot;: 0, &quot;condition&quot;: (&quot;OR&quot;, [ &quot;UI&quot; ], [ &quot;Error&quot; ]) } }
+</div></div></pre>
+
+</div>
+
+<hr width="100%"/>
+<div class="notes"><div class="note" id="target_note_1"><sup><a href="#source_note_1">1</a></sup> One can also
+use <span class="ext-a"><a href="https://github.com/whitequark/ppx_deriving_yojson/">ppx_deriving_yojson</a></span> to generate a part of the code from the type definition.</div></div>
+
+
+
+
+</div>
+</div>
+</body>
+</html>

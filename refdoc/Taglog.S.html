@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<title>Taglog reference documentation : Taglog.S</title>
+<link href="https://zoggy.github.io/ocaml-taglog/style.css" rel="stylesheet" type="text/css"/>
+<link href="/https://zoggy.github.io/ocaml-taglog/news.rss" rel="alternate" title="Rss feed" type="application/rss+xml"/>
+</head>
+<body>
+<div id="page">
+<div class="navbar">
+<div class="navbar-inner">
+  <ul class="nav">
+    <li class="&lt;navbar-home/&gt;"><a href="https://zoggy.github.io/ocaml-taglog/">Taglog</a></li>
+    <li class="&lt;navbar-download/&gt;"><a href="https://zoggy.github.io/ocaml-taglog/download.html">Download/Install</a></li>
+    <li class="active"><a href="https://zoggy.github.io/ocaml-taglog/doc.html">Documentation</a></li>
+    <li class="&lt;navbar-blog/&gt;"><a href="https://zoggy.github.io/ocaml-taglog/blog.html">Blog</a></li>
+    <li class="&lt;navbar-about/&gt;"><a href="https://zoggy.github.io/ocaml-taglog/about.html">?</a></li>
+  </ul>
+</div>
+</div>
+
+<div id="header">
+
+</div>
+<div id="page-body">
+
+
+<div class="ocamldoc-page">
+<div class="navbar"> <a class="up" href="Taglog.html" title="Taglog">Up</a>
+ <a class="post" href="Taglog.P.html" title="Taglog.P">Next</a>
+</div>
+<h1>Module type <a href="type_Taglog.S.html">Taglog.S</a></h1>
+
+<pre id="moduletypeSsigend"><a class="paragraph-url" href="#moduletypeSsigend"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span class="keyword">module type</span> S = <code class="code">sig</code> <a href="Taglog.S.html">..</a> <code class="code">end</code></pre><div class="info modtype top">
+Signature of the module produced by <a href="Taglog.Make.html"><code class="code">Taglog.Make</code></a>.<br/>
+</div>
+<hr width="100%"/>
+
+<pre id="typetag"><a class="paragraph-url" href="#typetag"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span id="TYPEtag"><span class="keyword">type</span> tag</span> </pre>
+<div class="info">
+Type of the tags in a condition<br/>
+</div>
+
+
+<pre id="valextend_evaltaglisttag"><a class="paragraph-url" href="#valextend_evaltaglisttag"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span id="VALextend_eval"><span class="keyword">val</span> extend_eval</span> : <code class="type">((<a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; <a href="Taglog.S.html#TYPEtag">tag</a> <a href="Taglog.html#TYPEcond">Taglog.cond</a> -&gt; bool) -&gt;<br/>        <a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; <a href="Taglog.S.html#TYPEtag">tag</a> <a href="Taglog.html#TYPEcond">Taglog.cond</a> -&gt; bool) -&gt;<br/>       unit</code></pre><div class="info">
+By default, conditions are evaluated using the
+         generic <a href="Taglog.html#VALeval"><code class="code">Taglog.eval</code></a> function.
+         <code class="code">extend_eval f</code> can be used to use <code class="code">f</code> instead of
+         the generic evaluation. <code class="code">f</code> will be given the previous
+         evaluation function stored in the module and replace it.
+        <code class="code">extend_eval</code> can be used for example when some tags
+        have meaningful parameters, or to always return true
+        for some tags, like error tags.<br/>
+</div>
+
+<pre id="valmkabintOcfconf_option"><a class="paragraph-url" href="#valmkabintOcfconf_option"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span id="VALmk"><span class="keyword">val</span> mk</span> : <code class="type">('a -&gt; 'b) -&gt;<br/>       int Ocf.conf_option -&gt;<br/>       <a href="Taglog.S.html#TYPEtag">tag</a> <a href="Taglog.html#TYPEcond">Taglog.cond</a> option Ocf.conf_option -&gt;<br/>       (?level:int -&gt; ?tags:<a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; 'a -&gt; 'b) -&gt;<br/>       ?level:int -&gt; ?tags:<a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; 'a -&gt; 'b</code></pre><div class="info">
+Main function to create log functions.
+      <code class="code">mk ign level_option cond_option f</code> returns a new
+      function <code class="code">?level -&gt; ?tags -&gt; fmt -&gt; ...</code> that we call <code class="code">g</code>.
+<div class="vertical-space"> </div>
+
+      <code class="code">ign</code> is the function used to ignore the format arguments.
+      <code class="code">f</code> is the function called to use the format arguments.
+      <code class="code">f</code> is given the level and tags passed to <code class="code">g</code>.
+      If no level is given to <code class="code">g</code>, then it is set to <code class="code">0</code>.
+      When <code class="code">g</code> is called, the following conditions are checked:<ul>
+<li>the level is less than or equal to the value stored in
+        <code class="code">level_option</code>,</li>
+<li>there is no condition stored in <code class="code">cond_level</code> or there is
+        a condition and it is evaluated to <code class="code">true</code> from the given
+        list of tags.</li>
+</ul>
+
+      If these two conditions are verified, <code class="code">f</code> is called with
+      the level, the tags and the format arguments. Else the
+      <code class="code">ign</code> function is called with the format arguments and
+      ignore them.
+<div class="vertical-space"> </div>
+
+      Example of usage:<ul>
+<li><pre class="codepre" id="letloglevelmkTaglogikpri"><a class="paragraph-url" href="#letloglevelmkTaglogikpri"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><code class="code">let log ?level =
+  mk
+    (Taglog.ikprintf (fun _ _ -&gt; Lwt.return_unit) ())
+    log_level log_cond fun_log ?level</code></pre></li>
+<li><a href="Taglog.S.html#VALmk_log"><code class="code">Taglog.S.mk_log</code></a> is defined as:
+  <pre class="codepre" id="letmk_logo_levo_condfmki"><a class="paragraph-url" href="#letmk_logo_levo_condfmki"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><code class="code">let mk_log o_lev o_cond f = mk iprintf o_lev o_cond f</code></pre></li>
+</ul>
+<br/>
+</div>
+
+<pre id="valmk_logintOcfconf_opti"><a class="paragraph-url" href="#valmk_logintOcfconf_opti"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span id="VALmk_log"><span class="keyword">val</span> mk_log</span> : <code class="type">int Ocf.conf_option -&gt;<br/>       <a href="Taglog.S.html#TYPEtag">tag</a> <a href="Taglog.html#TYPEcond">Taglog.cond</a> option Ocf.conf_option -&gt;<br/>       (?level:int -&gt;<br/>        ?tags:<a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; ('a, unit, 'b, unit) Pervasives.format4 -&gt; 'a) -&gt;<br/>       ?level:int -&gt;<br/>       ?tags:<a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; ('a, unit, 'b, unit) Pervasives.format4 -&gt; 'a</code></pre><div class="info">
+<code class="code">mk_log level_option cond_option f</code> creates
+      a log function for formats of type <code class="code">('a, unit, 'b, unit) format4</code>.<br/>
+</div>
+
+<pre id="valmk_fmt_logintOcfconf_"><a class="paragraph-url" href="#valmk_fmt_logintOcfconf_"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span id="VALmk_fmt_log"><span class="keyword">val</span> mk_fmt_log</span> : <code class="type">int Ocf.conf_option -&gt;<br/>       <a href="Taglog.S.html#TYPEtag">tag</a> <a href="Taglog.html#TYPEcond">Taglog.cond</a> option Ocf.conf_option -&gt;<br/>       (('a, unit, 'b, unit) Pervasives.format4 -&gt; 'a) -&gt;<br/>       ?level:int -&gt;<br/>       ?tags:<a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; ('a, unit, 'b, unit) Pervasives.format4 -&gt; 'a</code></pre><div class="info">
+Same as <a href="Taglog.S.html#VALmk_log"><code class="code">Taglog.S.mk_log</code></a> but the provided function <code class="code">f</code> does not require
+      <code class="code">?level</code> and <code class="code">?tags</code> parameters.<br/>
+</div>
+
+<pre id="valmk_str_logintOcfconf_"><a class="paragraph-url" href="#valmk_str_logintOcfconf_"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span id="VALmk_str_log"><span class="keyword">val</span> mk_str_log</span> : <code class="type">int Ocf.conf_option -&gt;<br/>       <a href="Taglog.S.html#TYPEtag">tag</a> <a href="Taglog.html#TYPEcond">Taglog.cond</a> option Ocf.conf_option -&gt;<br/>       (string -&gt; unit) -&gt; ?level:int -&gt; ?tags:<a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; string -&gt; unit</code></pre><div class="info">
+Same as <a href="Taglog.S.html#VALmk_fmt_log"><code class="code">Taglog.S.mk_fmt_log</code></a> but creates functions taking a
+       string instead of a format argument.<br/>
+</div>
+</div>
+
+
+</div>
+</div>
+</body>
+</html>
