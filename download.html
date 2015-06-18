@@ -31,19 +31,19 @@
 <ul class="toc"><li class="toc-section"><a href="https://zoggy.github.io/ocaml-taglog/download.html#opam">Quick install with Opam</a></li><li class="toc-section"><a href="https://zoggy.github.io/ocaml-taglog/download.html#deps">Dependencies</a></li><li class="toc-section"><a href="https://zoggy.github.io/ocaml-taglog/download.html#download">From the sources</a><ul class="toc"><li class="toc-subsection"><a href="https://zoggy.github.io/ocaml-taglog/download.html#compilation">Compilation</a></li></ul></li></ul>
 
 <div class="section"><div class="section-title" id="opam">Quick install with Opam</div>
-<p id="Theeasiestwaytoinstallis"><a class="paragraph-url" href="#Theeasiestwaytoinstallis"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+<p>
 The easiest way to install is to use <span class="ext-a"><a href="http://opam.ocaml.org">OPAM</a></span>.
 Install Opam, then, as a regular user, fetch and install an OCaml version and install
 Taglog.
 The whole can be done with the following opam commands:
 </p>
-<pre class="code-sh" id="opaminitcomp4021opamupda"><a class="paragraph-url" href="#opaminitcomp4021opamupda"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>$ opam init <span class="hl opt">--</span>comp<span class="hl opt">=</span><span class="hl num">4.02.1</span>
+<pre class="code-sh">$ opam init <span class="hl opt">--</span>comp<span class="hl opt">=</span><span class="hl num">4.02.1</span>
 $ opam update
 $ opam <span class="hl kwc">install</span> taglog</pre>
 </div>
 
 <div class="section"><div class="section-title" id="deps">Dependencies</div>
-<p id="TobuildTaglogyouwillneed"><a class="paragraph-url" href="#TobuildTaglogyouwillneed"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+<p>
 To build Taglog, you will need:
 </p>
 <ul>
@@ -53,10 +53,10 @@ To build Taglog, you will need:
 </div>
 
 <div class="section"><div class="section-title" id="download">From the sources</div>
-<p id="Getthesourcesfromgitrepo"><a class="paragraph-url" href="#Getthesourcesfromgitrepo"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>Get the sources from git repository:</p>
-<pre class="code-sh" id="gitclonehttpsgithubcomzo"><a class="paragraph-url" href="#gitclonehttpsgithubcomzo"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>$ git clone https<span class="hl opt">://</span>github.com<span class="hl opt">/</span>zoggy<span class="hl opt">/</span>ocaml<span class="hl opt">-</span>taglog.git</pre>
+<p>Get the sources from git repository:</p>
+<pre class="code-sh">$ git clone https<span class="hl opt">://</span>github.com<span class="hl opt">/</span>zoggy<span class="hl opt">/</span>ocaml<span class="hl opt">-</span>taglog.git</pre>
 
-<p id="Orpickoneofthereleases"><a class="paragraph-url" href="#Orpickoneofthereleases"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>Or pick one of the releases:</p>
+<p>Or pick one of the releases:</p>
 <ul>
 
 
@@ -70,11 +70,11 @@ To build Taglog, you will need:
 </ul>
 
 <div class="subsection"><div class="subsection-title" id="compilation">Compilation</div>
-<p id="Justtype"><a class="paragraph-url" href="#Justtype"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+<p>
 Just type
 </p>
-<pre class="code-sh" id="configuremakemakeinstall"><a class="paragraph-url" href="#configuremakemakeinstall"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>$ .<span class="hl opt">/</span>configure <span class="hl opt">&amp;&amp;</span> <span class="hl kwc">make</span> <span class="hl opt">&amp;&amp;</span> <span class="hl kwc">make install</span></pre>
-<p id="Thiswillinstallthetaglog"><a class="paragraph-url" href="#Thiswillinstallthetaglog"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a>
+<pre class="code-sh">$ .<span class="hl opt">/</span>configure <span class="hl opt">&amp;&amp;</span> <span class="hl kwc">make</span> <span class="hl opt">&amp;&amp;</span> <span class="hl kwc">make install</span></pre>
+<p>
 This will install the <code>taglog</code> package with ocamlfind.
 </p>
 </div>

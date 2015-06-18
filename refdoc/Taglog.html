@@ -31,12 +31,12 @@
  </div>
 <h1>Module <a href="type_Taglog.html">Taglog</a></h1>
 
-<pre id="moduleTaglogsigend"><a class="paragraph-url" href="#moduleTaglogsigend"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span class="keyword">module</span> Taglog: <code class="code">sig</code> <a href="Taglog.html">..</a> <code class="code">end</code></pre><div class="info module top">
+<pre><span class="keyword">module</span> Taglog: <code class="code">sig</code> <a href="Taglog.html">..</a> <code class="code">end</code></pre><div class="info module top">
 Logging facilities using tags and levels<br/>
 </div>
 <hr width="100%"/>
 
-<pre id="typeacond"><a class="paragraph-url" href="#typeacond"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><code><span id="TYPEcond"><span class="keyword">type</span> <code class="type">'a</code> cond</span> = </code></pre><table class="typetable">
+<pre><code><span id="TYPEcond"><span class="keyword">type</span> <code class="type">'a</code> cond</span> = </code></pre><table class="typetable">
 <tr>
 <td align="left" valign="top">
 <code><span class="keyword">|</span></code></td>
@@ -83,18 +83,18 @@ Conditions on tags.<br/>
 </div>
 
 
-<pre id="valcond_wrapperaOcfWrapp"><a class="paragraph-url" href="#valcond_wrapperaOcfWrapp"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span id="VALcond_wrapper"><span class="keyword">val</span> cond_wrapper</span> : <code class="type">'a Ocf.Wrapper.t -&gt; 'a <a href="Taglog.html#TYPEcond">cond</a> Ocf.Wrapper.t</code></pre><div class="info">
+<pre><span id="VALcond_wrapper"><span class="keyword">val</span> cond_wrapper</span> : <code class="type">'a Ocf.Wrapper.t -&gt; 'a <a href="Taglog.html#TYPEcond">cond</a> Ocf.Wrapper.t</code></pre><div class="info">
 <code class="code">cond_wrapper wrapper</code> creates a <code class="code">'a cond</code> wrapper for
   Ocf options from a wrapper for <code class="code">'a</code> values.<br/>
 </div>
 
-<pre id="valevalaboolacondbool"><a class="paragraph-url" href="#valevalaboolacondbool"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span id="VALeval"><span class="keyword">val</span> eval</span> : <code class="type">('a -&gt; bool) -&gt; 'a <a href="Taglog.html#TYPEcond">cond</a> -&gt; bool</code></pre><div class="info">
+<pre><span id="VALeval"><span class="keyword">val</span> eval</span> : <code class="type">('a -&gt; bool) -&gt; 'a <a href="Taglog.html#TYPEcond">cond</a> -&gt; bool</code></pre><div class="info">
 Generic evaluation of conditions.
   <code class="code">eval mem cond</code> evaluates the condition <code class="code">cond</code>. <code class="code">mem</code>
   indicates whether a given tag is present.<br/>
 </div>
 
-<pre id="moduleOpssigend"><a class="paragraph-url" href="#moduleOpssigend"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span class="keyword">module</span> <a href="Taglog.Ops.html">Ops</a>: <code class="code">sig</code> <a href="Taglog.Ops.html">..</a> <code class="code">end</code></pre><br/>
+<pre><span class="keyword">module</span> <a href="Taglog.Ops.html">Ops</a>: <code class="code">sig</code> <a href="Taglog.Ops.html">..</a> <code class="code">end</code></pre><br/>
 <div class="section-title" id="2_Generaliprintffunctions">General i*printf functions</div>
 <div class="vertical-space"> </div>
 
@@ -108,19 +108,19 @@ Generic evaluation of conditions.
 </ul>
 <br/>
 
-<pre id="valikprintfbbcCamlintern"><a class="paragraph-url" href="#valikprintfbbcCamlintern"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span id="VALikprintf"><span class="keyword">val</span> ikprintf</span> : <code class="type">('b -&gt; ('b, 'c) CamlinternalFormat.acc -&gt; 'd) -&gt;<br/>       'b -&gt; ('a, 'b, 'c, 'd) Pervasives.format4 -&gt; 'a</code></pre>
-<pre id="valiprintfaunitbunitPerv"><a class="paragraph-url" href="#valiprintfaunitbunitPerv"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span id="VALiprintf"><span class="keyword">val</span> iprintf</span> : <code class="type">('a, unit, 'b, unit) Pervasives.format4 -&gt; 'a</code></pre><br/>
+<pre><span id="VALikprintf"><span class="keyword">val</span> ikprintf</span> : <code class="type">('b -&gt; ('b, 'c) CamlinternalFormat.acc -&gt; 'd) -&gt;<br/>       'b -&gt; ('a, 'b, 'c, 'd) Pervasives.format4 -&gt; 'a</code></pre>
+<pre><span id="VALiprintf"><span class="keyword">val</span> iprintf</span> : <code class="type">('a, unit, 'b, unit) Pervasives.format4 -&gt; 'a</code></pre><br/>
 <div class="section-title" id="2_Functorialinterface">Functorial interface</div><br/>
 
-<pre id="moduletypeSsigend"><a class="paragraph-url" href="#moduletypeSsigend"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span class="keyword">module type</span> <a href="Taglog.S.html">S</a> = <code class="code">sig</code> <a href="Taglog.S.html">..</a> <code class="code">end</code></pre><div class="info">
+<pre><span class="keyword">module type</span> <a href="Taglog.S.html">S</a> = <code class="code">sig</code> <a href="Taglog.S.html">..</a> <code class="code">end</code></pre><div class="info">
 Signature of the module produced by <a href="Taglog.Make.html"><code class="code">Taglog.Make</code></a>.
 </div>
 
-<pre id="moduletypePsigend"><a class="paragraph-url" href="#moduletypePsigend"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span class="keyword">module type</span> <a href="Taglog.P.html">P</a> = <code class="code">sig</code> <a href="Taglog.P.html">..</a> <code class="code">end</code></pre><div class="info">
+<pre><span class="keyword">module type</span> <a href="Taglog.P.html">P</a> = <code class="code">sig</code> <a href="Taglog.P.html">..</a> <code class="code">end</code></pre><div class="info">
 Type of module parameter for <a href="Taglog.Make.html"><code class="code">Taglog.Make</code></a>.
 </div>
 
-<pre id="moduleMakefunctorTPSwith"><a class="paragraph-url" href="#moduleMakefunctorTPSwith"><img alt="" src="https://zoggy.github.io/ocaml-taglog/paragraph-url.png"/></a><span class="keyword">module</span> <a href="Taglog.Make.html">Make</a>: <div class="sig_block"><code class="code">functor (</code><code class="code">T</code><code class="code"> : </code><code class="type"><a href="Taglog.P.html">P</a></code><code class="code">) -&gt; </code><code class="type"><a href="Taglog.S.html">S</a></code><code class="type">  with type tag = T.t</code></div></pre></div>
+<pre><span class="keyword">module</span> <a href="Taglog.Make.html">Make</a>: <div class="sig_block"><code class="code">functor (</code><code class="code">T</code><code class="code"> : </code><code class="type"><a href="Taglog.P.html">P</a></code><code class="code">) -&gt; </code><code class="type"><a href="Taglog.S.html">S</a></code><code class="type">  with type tag = T.t</code></div></pre></div>
 
 
 </div>
