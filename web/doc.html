@@ -216,11 +216,7 @@ type tag += Database | Error | Network [@@deriving yojson] ;;
 <oc>
 let tag_wrapper =
   let to_ = tag_to_yojson in
-  let of_ ?def x =
-    match tag_of_yojson x with
-    | `Ok tag -> tag
-    | `Error _ -> Ocf.invalid_value x
-  in
+  let of_ ?def x = Ocf.Wrapper.of_ok_error tag_of_yojson x in
   Ocf.Wrapper.make to_ of_;;
 
 let cond_opt_wrapper = Ocf.Wrapper.option (Taglog.cond_wrapper tag_wrapper);;
