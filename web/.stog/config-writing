@@ -1,5 +1,5 @@
 automatic_ids = {
-  default = true
+  default = false
   (* pairs (type, bool) specifying whether to use automatic ids on element
      types *)
   by_type = []
