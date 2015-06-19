@@ -31,42 +31,52 @@ module W = Ocf.Wrapper
 type 'a cond =
   | Tag of 'a
   | Not of 'a cond
-  | Or of 'a cond * 'a cond
-  | And of 'a cond * 'a cond
+  | Or of 'a cond list
+  | And of 'a cond list
 
 let cond_wrapper w =
   let rec to_j = function
     Tag x -> w.W.to_json x
   | Not x -> `Tuple [`String "NOT" ; to_j x]
-  | Or (x, y) -> `Tuple [`String "OR" ; to_j x ; to_j y]
-  | And (x, y) -> `Tuple [`String "AND" ; to_j x ; to_j y]
+  | Or l -> `Tuple ((`String "OR") :: List.map to_j l)
+  | And l -> `Tuple ((`String "AND") :: List.map to_j l)
   in
   let rec from_j ?def = function
   | `Tuple [`String s ; x]
   | `List [`String s ; x] when String.lowercase s = "not" ->
       Not (from_j x)
-  | `Tuple [`String s ; x ; y]
-  | `List [`String s ; x ; y] when String.lowercase s = "or" ->
-      Or (from_j x, from_j y)
-  | `Tuple [`String s ; x ; y]
-  | `List [`String s ; x ; y] when String.lowercase s = "and" ->
-      Or (from_j x, from_j y)
+  | `Tuple [`String s ; `List l]
+  | `Tuple ((`String s) :: l)
+  | `List [`String s ; `List l]
+  | `List ((`String s) :: l) when String.lowercase s = "or" ->
+      Or (List.map from_j l)
+  | `Tuple [`String s ; `List l]
+  | `Tuple ((`String s) :: l)
+  | `List [`String s ; `List l]
+  | `List ((`String s) :: l) when String.lowercase s = "and" ->
+      And (List.map from_j l)
   | json -> Tag (w.W.from_json json)
   in
   W.make to_j from_j
 
-let rec eval mem = function
-| Tag t -> mem t
-| Not c -> not (eval mem c)
-| Or (c1, c2) -> (eval mem c1) || (eval mem c2)
-| And (c1, c2) -> (eval mem c1) && (eval mem c2)
+let rec fold_or eval acc = function
+| [] -> acc
+| cond :: q ->
+    let acc = acc || eval cond in
+    acc || fold_or eval acc q
+
+let rec fold_and eval acc = function
+| [] -> acc
+| cond :: q ->
+    let acc = acc && eval cond in
+    acc && fold_and eval acc q
 
 module Ops =
   struct
     let (??) t = Tag t
     let (~~) c = Not c
-    let (||) c1 c2 = Or (c1, c2)
-    let (&&) c1 c2 = And (c1, c2)
+    let (||) c1 c2 = Or [c1 ; c2]
+    let (&&) c1 c2 = And [c1; c2]
   end
 
 let ikprintf k x (CamlinternalFormatBasics.Format (fmt, _)) =
@@ -78,6 +88,13 @@ let iprintf fmt = ikprintf (fun x _ -> ignore x) () fmt
 module type S =
   sig
     type tag
+
+    val tag_eval : tag list -> tag -> bool
+    val eval : (tag list -> tag cond -> bool)
+
+    val extend_tag_eval :
+      ((tag list -> tag -> bool) -> tag list -> tag -> bool) -> unit
+
     val extend_eval :
       ((tag list -> tag cond -> bool) -> tag list -> tag cond -> bool) -> unit
 
@@ -115,8 +132,29 @@ module type P = sig type t end
 module Make(T:P) : S with type tag = T.t =
   struct
     type tag = T.t
-    let eval = ref (fun list -> eval (fun t -> List.mem t list))
-    let extend_eval f = eval := f !eval
+    let ref_tag_eval = ref (fun _ _ -> assert false)
+    let ref_eval = ref (fun _ _ -> assert false)
+
+    let extend_tag_eval f = ref_tag_eval := f !ref_tag_eval
+    let extend_eval f = ref_eval := f !ref_eval
+
+    let tag_eval list tag = !ref_tag_eval list tag
+    let eval list cond = !ref_eval list cond
+
+    let () =
+      let f tags = function
+      | Tag t -> tag_eval tags t
+      | Not c -> not (eval tags c)
+      | Or l -> fold_or (eval tags) false l
+      | And [] -> false
+      | And l -> fold_and (eval tags) true l
+      in
+      ref_eval := f
+
+    let () =
+      let f tags tag = List.mem tag tags in
+      ref_tag_eval := f
+
 
     let mk ign =
       fun option_level
@@ -130,7 +168,7 @@ module Make(T:P) : S with type tag = T.t =
           | None -> f ?level ?tags arg
           | Some cond ->
               match tags with
-              | Some list when !eval list cond -> f ?level ?tags arg
+              | Some list when eval list cond -> f ?level ?tags arg
               | _ -> ign arg
 
     let mk_log o_lev o_cond f = mk iprintf o_lev o_cond f

@@ -40,7 +40,7 @@ let log ?level ?tags str =
 let fail ?level ?tags str =
   T.mk_fmt_log dump_level dump_cond
     (Printf.ksprintf print_endline) ?level ?tags
-    "%s %a" str (fun () -> assert false) ()
+    "%s %a" str (fun () -> prerr_endline str ; assert false) ()
 
 let () = Ocf.set dump_level 1
 

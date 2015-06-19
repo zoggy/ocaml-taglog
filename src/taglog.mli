@@ -32,17 +32,12 @@
 type 'a cond =
   | Tag of 'a (** true if the tag is present *)
   | Not of 'a cond  (** logical not *)
-  | Or of 'a cond * 'a cond  (** logical or *)
-  | And of 'a cond * 'a cond  (** logicial and *)
+  | Or of 'a cond list (** logical or between elements *)
+  | And of 'a cond list  (** logical and between elements *)
 
 (** [cond_wrapper wrapper] creates a ['a cond] wrapper for
   Ocf options from a wrapper for ['a] values. *)
 val cond_wrapper : 'a Ocf.Wrapper.t -> 'a cond Ocf.Wrapper.t
-
-(** Generic evaluation of conditions.
-  [eval mem cond] evaluates the condition [cond]. [mem]
-  indicates whether a given tag is present. *)
-val eval : ('a -> bool) -> 'a cond -> bool
 
 module Ops :
   sig
@@ -85,14 +80,27 @@ module type S =
     (** Type of the tags in a condition *)
     type tag
 
-    (** By default, conditions are evaluated using the
-         generic {!eval} function.
-         [extend_eval f] can be used to use [f] instead of
-         the generic evaluation. [f] will be given the previous
-         evaluation function stored in the module and replace it.
-        [extend_eval] can be used for example when some tags
-        have meaningful parameters, or to always return true
-        for some tags, like error tags.
+    (** [tag_eval tags tag] retuns true if one of the [tags]
+      matches the given [tag]. Default function returns
+      [List.mem tag tags]. *)
+    val tag_eval : tag list -> tag -> bool
+
+    (** [eval tags cond] evaluates [cond] according to given [tags],
+       using {!tag_eval} to evaluate a [Tag] in the condition. *)
+    val eval : tag list -> tag cond -> bool
+
+    (** [extend_tag_eval f] replaces the {!tag_eval} function with the
+      given one. The previous [tag_eval] function is passed to [f].
+       [extend_tag_eval] can be used for example when some tags
+       have meaningful parameters.
+    *)
+    val extend_tag_eval :
+      ((tag list -> tag -> bool) -> tag list -> tag -> bool) -> unit
+
+    (** [extend_eval f] replaces the {!eval} function with the
+           given one. The previous [eval] function is passed to [f].
+           [extend_eval] can be used for example to always return true
+           for some tags, like error tags.
     *)
     val extend_eval :
       ((tag list -> tag cond -> bool) -> tag list -> tag cond -> bool) ->
