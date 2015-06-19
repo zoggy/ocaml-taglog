@@ -35,9 +35,9 @@ logical not<br/>
 <td align="left" valign="top" >
 <code><span class="keyword">|</span></code></td>
 <td align="left" valign="top" >
-<code><span id="TYPEELTcond.Or"><span class="constructor">Or</span></span> <span class="keyword">of</span> <code class="type">'a <a href="Taglog.html#TYPEcond">cond</a> * 'a <a href="Taglog.html#TYPEcond">cond</a></code></code></td>
+<code><span id="TYPEELTcond.Or"><span class="constructor">Or</span></span> <span class="keyword">of</span> <code class="type">'a <a href="Taglog.html#TYPEcond">cond</a> list</code></code></td>
 <td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" ><div class="info ">
-logical or<br/>
+logical or between elements<br/>
 </div>
 </td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
 </tr>
@@ -45,9 +45,9 @@ logical or<br/>
 <td align="left" valign="top" >
 <code><span class="keyword">|</span></code></td>
 <td align="left" valign="top" >
-<code><span id="TYPEELTcond.And"><span class="constructor">And</span></span> <span class="keyword">of</span> <code class="type">'a <a href="Taglog.html#TYPEcond">cond</a> * 'a <a href="Taglog.html#TYPEcond">cond</a></code></code></td>
+<code><span id="TYPEELTcond.And"><span class="constructor">And</span></span> <span class="keyword">of</span> <code class="type">'a <a href="Taglog.html#TYPEcond">cond</a> list</code></code></td>
 <td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" ><div class="info ">
-logicial and<br/>
+logical and between elements<br/>
 </div>
 </td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
 </tr></table>
@@ -60,12 +60,6 @@ Conditions on tags.<br/>
 <pre><span id="VALcond_wrapper"><span class="keyword">val</span> cond_wrapper</span> : <code class="type">'a Ocf.Wrapper.t -&gt; 'a <a href="Taglog.html#TYPEcond">cond</a> Ocf.Wrapper.t</code></pre><div class="info ">
 <code class="code">cond_wrapper wrapper</code> creates a <code class="code">'a cond</code> wrapper for
   Ocf options from a wrapper for <code class="code">'a</code> values.<br/>
-</div>
-
-<pre><span id="VALeval"><span class="keyword">val</span> eval</span> : <code class="type">('a -&gt; bool) -&gt; 'a <a href="Taglog.html#TYPEcond">cond</a> -&gt; bool</code></pre><div class="info ">
-Generic evaluation of conditions.
-  <code class="code">eval mem cond</code> evaluates the condition <code class="code">cond</code>. <code class="code">mem</code>
-  indicates whether a given tag is present.<br/>
 </div>
 
 <pre><span class="keyword">module</span> <a href="Taglog.Ops.html">Ops</a>: <code class="code">sig</code> <a href="Taglog.Ops.html">..</a> <code class="code">end</code></pre><br/>

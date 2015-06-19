@@ -22,7 +22,10 @@ This approach is useful but setting the log level to "Debug" in an
 application can result in having a lot of messages from all the
 parts of an application while looking for what's going on only in
 one part of the application (for example database access, user interface,
-networking, ...).
+networking, ...). Some libraries<note>Like the <ml>Lwt_log</ml> module
+in <ext-a href="https://ocsigen.org/lwt/">Lwt</ext-a>.</note> use "sections"
+to be able to choose which part of the application are logged. But each
+message can have only one section.
 </p>
 <p>
 The Taglog library provides a way to handle both log levels and
@@ -41,8 +44,8 @@ This condition is a logical expression of type <ml>'a cond</ml>,
 <ocaml>type 'a cond =
   | Tag of 'a (** true if the tag is present *)
   | Not of 'a cond  (** logical not *)
-  | Or of 'a cond * 'a cond  (** logical or *)
-  | And of 'a cond * 'a cond  (** logicial and *)
+  | Or of 'a cond list (** logical or between elements *)
+  | And of 'a cond list  (** logical and between elements *)
 </ocaml>
 <p>
 When the log functions are passed a message, it will be
@@ -172,8 +175,8 @@ extend the condition evaluation function to always return <ml>true</ml> if
 the list of tags contains <ml>Error</ml>:
 </p>
 <oc>
-let f fallback tags cond =
-  (List.mem Error tags) || fallback tags cond;;
+let f previous_eval tags cond =
+  (List.mem Error tags) || previous_eval tags cond;;
 T.extend_eval f ;;
 </oc>
 <p>Let's change our condition to print only messages regarding database
