@@ -56,15 +56,29 @@ Type of the tags in a condition<br/>
 </div>
 
 
+<pre><span id="VALtag_eval"><span class="keyword">val</span> tag_eval</span> : <code class="type"><a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; <a href="Taglog.S.html#TYPEtag">tag</a> -&gt; bool</code></pre><div class="info">
+<code class="code">tag_eval tags tag</code> retuns true if one of the <code class="code">tags</code>
+      matches the given <code class="code">tag</code>. Default function returns
+      <code class="code">List.mem tag tags</code>.<br/>
+</div>
+
+<pre><span id="VALeval"><span class="keyword">val</span> eval</span> : <code class="type"><a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; <a href="Taglog.S.html#TYPEtag">tag</a> <a href="Taglog.html#TYPEcond">Taglog.cond</a> -&gt; bool</code></pre><div class="info">
+<code class="code">eval tags cond</code> evaluates <code class="code">cond</code> according to given <code class="code">tags</code>,
+       using <a href="Taglog.S.html#VALtag_eval"><code class="code">Taglog.S.tag_eval</code></a> to evaluate a <code class="code">Tag</code> in the condition.<br/>
+</div>
+
+<pre><span id="VALextend_tag_eval"><span class="keyword">val</span> extend_tag_eval</span> : <code class="type">((<a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; <a href="Taglog.S.html#TYPEtag">tag</a> -&gt; bool) -&gt;<br/>        <a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; <a href="Taglog.S.html#TYPEtag">tag</a> -&gt; bool) -&gt;<br/>       unit</code></pre><div class="info">
+<code class="code">extend_tag_eval f</code> replaces the <a href="Taglog.S.html#VALtag_eval"><code class="code">Taglog.S.tag_eval</code></a> function with the
+      given one. The previous <code class="code">tag_eval</code> function is passed to <code class="code">f</code>.
+       <code class="code">extend_tag_eval</code> can be used for example when some tags
+       have meaningful parameters.<br/>
+</div>
+
 <pre><span id="VALextend_eval"><span class="keyword">val</span> extend_eval</span> : <code class="type">((<a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; <a href="Taglog.S.html#TYPEtag">tag</a> <a href="Taglog.html#TYPEcond">Taglog.cond</a> -&gt; bool) -&gt;<br/>        <a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; <a href="Taglog.S.html#TYPEtag">tag</a> <a href="Taglog.html#TYPEcond">Taglog.cond</a> -&gt; bool) -&gt;<br/>       unit</code></pre><div class="info">
-By default, conditions are evaluated using the
-         generic <a href="Taglog.html#VALeval"><code class="code">Taglog.eval</code></a> function.
-         <code class="code">extend_eval f</code> can be used to use <code class="code">f</code> instead of
-         the generic evaluation. <code class="code">f</code> will be given the previous
-         evaluation function stored in the module and replace it.
-        <code class="code">extend_eval</code> can be used for example when some tags
-        have meaningful parameters, or to always return true
-        for some tags, like error tags.<br/>
+<code class="code">extend_eval f</code> replaces the <a href="Taglog.S.html#VALeval"><code class="code">Taglog.S.eval</code></a> function with the
+           given one. The previous <code class="code">eval</code> function is passed to <code class="code">f</code>.
+           <code class="code">extend_eval</code> can be used for example to always return true
+           for some tags, like error tags.<br/>
 </div>
 
 <pre><span id="VALmk"><span class="keyword">val</span> mk</span> : <code class="type">('a -&gt; 'b) -&gt;<br/>       int Ocf.conf_option -&gt;<br/>       <a href="Taglog.S.html#TYPEtag">tag</a> <a href="Taglog.html#TYPEcond">Taglog.cond</a> option Ocf.conf_option -&gt;<br/>       (?level:int -&gt; ?tags:<a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; 'a -&gt; 'b) -&gt;<br/>       ?level:int -&gt; ?tags:<a href="Taglog.S.html#TYPEtag">tag</a> list -&gt; 'a -&gt; 'b</code></pre><div class="info">

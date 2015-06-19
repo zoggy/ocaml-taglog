@@ -30,6 +30,10 @@
 <code class="code"><span class="keyword">functor</span> (<span class="constructor">T</span> : <span class="constructor">P</span>) <span class="keywordsign">-&gt;</span><br/>
   <span class="keyword">sig</span><br/>
     <span class="keyword">type</span> tag = <span class="constructor">T</span>.t<br/>
+    <span class="keyword">val</span> tag_eval : tag list <span class="keywordsign">-&gt;</span> tag <span class="keywordsign">-&gt;</span> bool<br/>
+    <span class="keyword">val</span> eval : tag list <span class="keywordsign">-&gt;</span> tag cond <span class="keywordsign">-&gt;</span> bool<br/>
+    <span class="keyword">val</span> extend_tag_eval :<br/>
+      ((tag list <span class="keywordsign">-&gt;</span> tag <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span> tag list <span class="keywordsign">-&gt;</span> tag <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span> unit<br/>
     <span class="keyword">val</span> extend_eval :<br/>
       ((tag list <span class="keywordsign">-&gt;</span> tag cond <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span> tag list <span class="keywordsign">-&gt;</span> tag cond <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span><br/>
       unit<br/>

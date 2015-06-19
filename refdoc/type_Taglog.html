@@ -31,10 +31,9 @@
   <span class="keyword">type</span> <span class="keywordsign">'</span>a cond =<br/>
       <span class="constructor">Tag</span> <span class="keyword">of</span> <span class="keywordsign">'</span>a<br/>
     <span class="keywordsign">|</span> <span class="constructor">Not</span> <span class="keyword">of</span> <span class="keywordsign">'</span>a <span class="constructor">Taglog</span>.cond<br/>
-    <span class="keywordsign">|</span> <span class="constructor">Or</span> <span class="keyword">of</span> <span class="keywordsign">'</span>a <span class="constructor">Taglog</span>.cond * <span class="keywordsign">'</span>a <span class="constructor">Taglog</span>.cond<br/>
-    <span class="keywordsign">|</span> <span class="constructor">And</span> <span class="keyword">of</span> <span class="keywordsign">'</span>a <span class="constructor">Taglog</span>.cond * <span class="keywordsign">'</span>a <span class="constructor">Taglog</span>.cond<br/>
+    <span class="keywordsign">|</span> <span class="constructor">Or</span> <span class="keyword">of</span> <span class="keywordsign">'</span>a <span class="constructor">Taglog</span>.cond list<br/>
+    <span class="keywordsign">|</span> <span class="constructor">And</span> <span class="keyword">of</span> <span class="keywordsign">'</span>a <span class="constructor">Taglog</span>.cond list<br/>
   <span class="keyword">val</span> cond_wrapper : <span class="keywordsign">'</span>a <span class="constructor">Ocf</span>.<span class="constructor">Wrapper</span>.t <span class="keywordsign">-&gt;</span> <span class="keywordsign">'</span>a <span class="constructor">Taglog</span>.cond <span class="constructor">Ocf</span>.<span class="constructor">Wrapper</span>.t<br/>
-  <span class="keyword">val</span> eval : (<span class="keywordsign">'</span>a <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span> <span class="keywordsign">'</span>a <span class="constructor">Taglog</span>.cond <span class="keywordsign">-&gt;</span> bool<br/>
   <span class="keyword">module</span> <span class="constructor">Ops</span> :<br/>
     <span class="keyword">sig</span><br/>
       <span class="keyword">val</span> ( <span class="keywordsign">??</span> ) : <span class="keywordsign">'</span>a <span class="keywordsign">-&gt;</span> <span class="keywordsign">'</span>a <span class="constructor">Taglog</span>.cond<br/>
@@ -49,6 +48,12 @@
   <span class="keyword">module</span> <span class="keyword">type</span> <span class="constructor">S</span> =<br/>
     <span class="keyword">sig</span><br/>
       <span class="keyword">type</span> tag<br/>
+      <span class="keyword">val</span> tag_eval : <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag list <span class="keywordsign">-&gt;</span> <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag <span class="keywordsign">-&gt;</span> bool<br/>
+      <span class="keyword">val</span> eval : <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag list <span class="keywordsign">-&gt;</span> <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag <span class="constructor">Taglog</span>.cond <span class="keywordsign">-&gt;</span> bool<br/>
+      <span class="keyword">val</span> extend_tag_eval :<br/>
+        ((<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag list <span class="keywordsign">-&gt;</span> <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span><br/>
+         <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag list <span class="keywordsign">-&gt;</span> <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span><br/>
+        unit<br/>
       <span class="keyword">val</span> extend_eval :<br/>
         ((<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag list <span class="keywordsign">-&gt;</span> <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag <span class="constructor">Taglog</span>.cond <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span><br/>
          <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag list <span class="keywordsign">-&gt;</span> <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag <span class="constructor">Taglog</span>.cond <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span><br/>
@@ -86,6 +91,10 @@
     <span class="keyword">functor</span> (<span class="constructor">T</span> : <span class="constructor">P</span>) <span class="keywordsign">-&gt;</span><br/>
       <span class="keyword">sig</span><br/>
         <span class="keyword">type</span> tag = <span class="constructor">T</span>.t<br/>
+        <span class="keyword">val</span> tag_eval : tag list <span class="keywordsign">-&gt;</span> tag <span class="keywordsign">-&gt;</span> bool<br/>
+        <span class="keyword">val</span> eval : tag list <span class="keywordsign">-&gt;</span> tag cond <span class="keywordsign">-&gt;</span> bool<br/>
+        <span class="keyword">val</span> extend_tag_eval :<br/>
+          ((tag list <span class="keywordsign">-&gt;</span> tag <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span> tag list <span class="keywordsign">-&gt;</span> tag <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span> unit<br/>
         <span class="keyword">val</span> extend_eval :<br/>
           ((tag list <span class="keywordsign">-&gt;</span> tag cond <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span> tag list <span class="keywordsign">-&gt;</span> tag cond <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span><br/>
           unit<br/>

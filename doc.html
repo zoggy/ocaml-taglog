@@ -50,7 +50,9 @@ This approach is useful but setting the log level to &quot;Debug&quot; in an
 application can result in having a lot of messages from all the
 parts of an application while looking for what's going on only in
 one part of the application (for example database access, user interface,
-networking, ...).
+networking, ...). Some libraries<sup class="footnote-link" id="source_note_1"><a href="#target_note_1">1</a></sup> use &quot;sections&quot;
+to be able to choose which part of the application are logged. But each
+message can have only one section.
 </p>
 <p>
 The Taglog library provides a way to handle both log levels and
@@ -69,8 +71,8 @@ This condition is a logical expression of type <span class="icode"><span class="
 <pre class="code-ocaml"><span class="hl kwa">type</span><span class="hl std"> '</span><span class="">a</span><span class="hl std"> </span><span class="">cond</span><span class="hl std"> =
   | </span><span class="hl kwc">Tag</span><span class="hl std"> </span><span class="hl kwa">of</span><span class="hl std"> '</span><span class="">a</span><span class="hl std"> </span><span class="hl com">(** true if the tag is present *)</span><span class="hl std">
   | </span><span class="hl kwc">Not</span><span class="hl std"> </span><span class="hl kwa">of</span><span class="hl std"> '</span><span class="">a</span><span class="hl std"> </span><span class="">cond</span><span class="hl std">  </span><span class="hl com">(** logical not *)</span><span class="hl std">
-  | </span><span class="hl kwc">Or</span><span class="hl std"> </span><span class="hl kwa">of</span><span class="hl std"> '</span><span class="">a</span><span class="hl std"> </span><span class="">cond</span><span class="hl std"> * '</span><span class="">a</span><span class="hl std"> </span><span class="">cond</span><span class="hl std">  </span><span class="hl com">(** logical or *)</span><span class="hl std">
-  | </span><span class="hl kwc">And</span><span class="hl std"> </span><span class="hl kwa">of</span><span class="hl std"> '</span><span class="">a</span><span class="hl std"> </span><span class="">cond</span><span class="hl std"> * '</span><span class="">a</span><span class="hl std"> </span><span class="">cond</span><span class="hl std">  </span><span class="hl com">(** logicial and *)</span><span class="hl std">
+  | </span><span class="hl kwc">Or</span><span class="hl std"> </span><span class="hl kwa">of</span><span class="hl std"> '</span><span class="">a</span><span class="hl std"> </span><span class="">cond</span><span class="hl std"> </span><span class="hl kwd">list</span><span class="hl std"> </span><span class="hl com">(** logical or between elements *)</span><span class="hl std">
+  | </span><span class="hl kwc">And</span><span class="hl std"> </span><span class="hl kwa">of</span><span class="hl std"> '</span><span class="">a</span><span class="hl std"> </span><span class="">cond</span><span class="hl std"> </span><span class="hl kwd">list</span><span class="hl std">  </span><span class="hl com">(** logical and between elements *)</span><span class="hl std">
 </span></pre>
 <p>
 When the log functions are passed a message, it will be
@@ -99,7 +101,7 @@ The first thing to do is to define a type to represent tags.
 <p>
 To store a condition on these tags in an Ocf option, we have to
 define a wrapper for our <span class="icode"><span class="">tag</span></span> type, which is a JSON
-encoder/decoder. Here is a simple way to do it<sup class="footnote-link" id="source_note_1"><a href="#target_note_1">1</a></sup>:
+encoder/decoder. Here is a simple way to do it<sup class="footnote-link" id="source_note_2"><a href="#target_note_2">2</a></sup>:
 </p>
 
 <pre class="code-ocaml"><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">tag_wrapper</span><span class="hl std"> =
@@ -223,8 +225,8 @@ extend the condition evaluation function to always return <span class="icode"><s
 the list of tags contains <span class="icode"><span class="hl kwc">Error</span></span>:
 </p>
 
-<pre class="code-ocaml"><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">f</span><span class="hl std"> </span><span class="">fallback</span><span class="hl std"> </span><span class="">tags</span><span class="hl std"> </span><span class="">cond</span><span class="hl std"> =
-  (</span><span class="hl kwc">List</span><span class="hl std">.</span><span class="">mem</span><span class="hl std"> </span><span class="hl kwc">Error</span><span class="hl std"> </span><span class="">tags</span><span class="hl std">) || </span><span class="">fallback</span><span class="hl std"> </span><span class="">tags</span><span class="hl std"> </span><span class="">cond</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">val f : (tag list -&gt; 'a -&gt; bool) -&gt; tag list -&gt; 'a -&gt; bool = &lt;fun&gt;
+<pre class="code-ocaml"><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">f</span><span class="hl std"> </span><span class="">previous_eval</span><span class="hl std"> </span><span class="">tags</span><span class="hl std"> </span><span class="">cond</span><span class="hl std"> =
+  (</span><span class="hl kwc">List</span><span class="hl std">.</span><span class="">mem</span><span class="hl std"> </span><span class="hl kwc">Error</span><span class="hl std"> </span><span class="">tags</span><span class="hl std">) || </span><span class="">previous_eval</span><span class="hl std"> </span><span class="">tags</span><span class="hl std"> </span><span class="">cond</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">val f : (tag list -&gt; 'a -&gt; bool) -&gt; tag list -&gt; 'a -&gt; bool = &lt;fun&gt;
 </div></div><div># <span class="hl kwc">T</span><span class="hl std">.</span><span class="">extend_eval</span><span class="hl std"> </span><span class="">f</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
 </div></div></pre>
 
@@ -322,7 +324,8 @@ store our condition:
 </div>
 
 <hr width="100%"/>
-<div class="notes"><div class="note" id="target_note_1"><sup><a href="#source_note_1">1</a></sup> One can also
+<div class="notes"><div class="note" id="target_note_1"><sup><a href="#source_note_1">1</a></sup> Like the <span class="icode"><span class="hl kwc">Lwt_log</span></span> module
+in <span class="ext-a"><a href="https://ocsigen.org/lwt/">Lwt</a></span>.</div><div class="note" id="target_note_2"><sup><a href="#source_note_2">2</a></sup> One can also
 use <span class="ext-a"><a href="https://github.com/whitequark/ppx_deriving_yojson/">ppx_deriving_yojson</a></span> to generate a part of the code from the type definition.</div></div>
 
 

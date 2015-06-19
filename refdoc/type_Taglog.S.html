@@ -29,6 +29,12 @@
 <div class="ocamldoc-page">
 <code class="code"><span class="keyword">sig</span><br/>
   <span class="keyword">type</span> tag<br/>
+  <span class="keyword">val</span> tag_eval : <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag list <span class="keywordsign">-&gt;</span> <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag <span class="keywordsign">-&gt;</span> bool<br/>
+  <span class="keyword">val</span> eval : <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag list <span class="keywordsign">-&gt;</span> <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag <span class="constructor">Taglog</span>.cond <span class="keywordsign">-&gt;</span> bool<br/>
+  <span class="keyword">val</span> extend_tag_eval :<br/>
+    ((<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag list <span class="keywordsign">-&gt;</span> <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span><br/>
+     <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag list <span class="keywordsign">-&gt;</span> <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span><br/>
+    unit<br/>
   <span class="keyword">val</span> extend_eval :<br/>
     ((<span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag list <span class="keywordsign">-&gt;</span> <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag <span class="constructor">Taglog</span>.cond <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span><br/>
      <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag list <span class="keywordsign">-&gt;</span> <span class="constructor">Taglog</span>.<span class="constructor">S</span>.tag <span class="constructor">Taglog</span>.cond <span class="keywordsign">-&gt;</span> bool) <span class="keywordsign">-&gt;</span><br/>
