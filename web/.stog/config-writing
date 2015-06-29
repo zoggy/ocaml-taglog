@@ -1,6 +1,8 @@
-automatic_ids = {
-  default = false
-  (* pairs (type, bool) specifying whether to use automatic ids on element
-     types *)
-  by_type = []
+{
+  "automatic_ids": {
+    "default": false,
+    "by-type":
+      "associations between document type and boolean, like { page: false, post: true, ..}",
+    "by-type": {}
+  }
 }

@@ -78,7 +78,7 @@ use <ext-a href="https://github.com/whitequark/ppx_deriving_yojson/">ppx_derivin
 </p>
 <oc>
 let tag_wrapper =
-  let to_j = function
+  let to_j ?with_doc = function
   | Database -> `String "database"
   | Error -> `String "error"
   | Network -> `String "network"
@@ -218,7 +218,7 @@ type tag += Database | Error | Network [@@deriving yojson] ;;
 </oc>
 <oc>
 let tag_wrapper =
-  let to_ = tag_to_yojson in
+  let to_ ?with_doc = tag_to_yojson in
   let of_ ?def x = Ocf.Wrapper.of_ok_error tag_of_yojson x in
   Ocf.Wrapper.make to_ of_;;
 

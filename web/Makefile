@@ -6,7 +6,7 @@ STOG_SERVER=./mystog-server
 DEST_DIR=../../taglog-gh-pages
 BASE_URL_OPTION=
 PACKAGES=stog.markdown,stog-writing
-STOG_OPTIONS=--stog-ocaml-session "$(STOG_OCAML_SESSION) -ppx 'ocamlfind ppx_deriving/ppx_deriving `ocamlfind query -predicates ppx_driver,byte -a-format ppx_deriving_yojson`' -package ppx_deriving_yojson,yojson,ocf -I ../src" -d $(DEST_DIR) $(BASE_URL_OPTION)
+STOG_OPTIONS=--stog-ocaml-session "$(STOG_OCAML_SESSION) -ppx 'ocamlfind ppx_deriving/ppx_deriving_main `ocamlfind query -predicates ppx_driver,byte -a-format ppx_deriving_yojson`' -package ppx_deriving_yojson,yojson,ocf -I ../src" -d $(DEST_DIR) $(BASE_URL_OPTION)
 
 build:
 	$(MAKE) site
