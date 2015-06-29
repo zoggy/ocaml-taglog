@@ -35,11 +35,11 @@ type 'a cond =
   | And of 'a cond list
 
 let cond_wrapper w =
-  let rec to_j = function
-    Tag x -> w.W.to_json x
-  | Not x -> `Tuple [`String "NOT" ; to_j x]
-  | Or l -> `Tuple ((`String "OR") :: List.map to_j l)
-  | And l -> `Tuple ((`String "AND") :: List.map to_j l)
+  let rec to_j ?with_doc = function
+    Tag x -> w.W.to_json ?with_doc x
+  | Not x -> `Tuple [`String "NOT" ; to_j ?with_doc x]
+  | Or l -> `Tuple ((`String "OR") :: List.map (to_j ?with_doc) l)
+  | And l -> `Tuple ((`String "AND") :: List.map (to_j ?with_doc) l)
   in
   let rec from_j ?def = function
   | `Tuple [`String s ; x]

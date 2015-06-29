@@ -901,7 +901,7 @@ let _ =
 let _ = !print "\n### checking required tools and libraries ###\n"
 
 
-let _ = check_ocamlfind_package conf ~min_version: [0;2;0] "ocf"
+let _ = check_ocamlfind_package conf ~min_version: [0;3;0] "ocf"
 
 let _ = !print "\n###\n"
 
