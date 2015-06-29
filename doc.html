@@ -105,7 +105,7 @@ encoder/decoder. Here is a simple way to do it<sup class="footnote-link" id="sou
 </p>
 
 <pre class="code-ocaml"><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">tag_wrapper</span><span class="hl std"> =
-  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">to_j</span><span class="hl std"> = </span><span class="hl kwa">function</span><span class="hl std">
+  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">to_j</span><span class="hl std"> ?</span><span class="">with_doc</span><span class="hl std"> = </span><span class="hl kwa">function</span><span class="hl std">
   | </span><span class="hl kwc">Database</span><span class="hl std"> -&gt; `</span><span class="hl kwc">String</span><span class="hl std"> </span><span class="hl str">&quot;database&quot;</span><span class="hl std">
   | </span><span class="hl kwc">Error</span><span class="hl std"> -&gt; `</span><span class="hl kwc">String</span><span class="hl std"> </span><span class="hl str">&quot;error&quot;</span><span class="hl std">
   | </span><span class="hl kwc">Network</span><span class="hl std"> -&gt; `</span><span class="hl kwc">String</span><span class="hl std"> </span><span class="hl str">&quot;network&quot;</span><span class="hl std">
@@ -276,7 +276,7 @@ the condition is to extend the tag wrapper.
 
 
 <pre class="code-ocaml"><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">tag_wrapper</span><span class="hl std"> =
-  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">to_</span><span class="hl std"> = </span><span class="">tag_to_yojson</span><span class="hl std"> </span><span class="hl kwa">in</span><span class="hl std">
+  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">to_</span><span class="hl std"> ?</span><span class="">with_doc</span><span class="hl std"> = </span><span class="">tag_to_yojson</span><span class="hl std"> </span><span class="hl kwa">in</span><span class="hl std">
   </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">of_</span><span class="hl std"> ?</span><span class="">def</span><span class="hl std"> </span><span class="">x</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="hl kwc">Wrapper</span><span class="hl std">.</span><span class="">of_ok_error</span><span class="hl std"> </span><span class="">tag_of_yojson</span><span class="hl std"> </span><span class="">x</span><span class="hl std"> </span><span class="hl kwa">in</span><span class="hl std">
   </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="hl kwc">Wrapper</span><span class="hl std">.</span><span class="">make</span><span class="hl std"> </span><span class="">to_</span><span class="hl std"> </span><span class="">of_</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">val tag_wrapper : tag Ocf.Wrapper.t =
   {Ocf.Wrapper.to_json = &lt;fun&gt;; from_json = &lt;fun&gt;}
