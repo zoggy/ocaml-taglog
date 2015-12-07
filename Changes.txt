@@ -1,2 +1,5 @@
 Next release:
+- default level for logging functions is now 1 (instead of 0)
+
+Release 0.2.0:
 - upgrade to ocf 0.3.0

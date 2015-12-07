@@ -160,7 +160,7 @@ module Make(T:P) : S with type tag = T.t =
       fun option_level
           (option_cond : tag cond option Ocf.conf_option) f ->
       fun ?level ?tags arg ->
-        let lev = match level with None -> 0 | Some n -> n in
+        let lev = match level with None -> 1 | Some n -> n in
         if Ocf.get option_level < lev then
           ign arg
         else
