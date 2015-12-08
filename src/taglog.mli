@@ -113,7 +113,7 @@ module type S =
       [ign] is the function used to ignore the format arguments.
       [f] is the function called to use the format arguments.
       [f] is given the level and tags passed to [g].
-      If no level is given to [g], then it is set to [0].
+      If no level is given to [g], then it is set to [1].
       When [g] is called, the following conditions are checked:
       - the level is less than or equal to the value stored in
         [level_option],
