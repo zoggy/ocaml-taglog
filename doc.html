@@ -1,5 +1,4 @@
-<!DOCTYPE HTML>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
 <title>Taglog : Documentation</title>
@@ -43,14 +42,14 @@ having a <span class="icode"><span class="">level</span></span> parameter. At ea
 the <span class="icode"><span class="">level</span></span> parameter of the function is compared to the
 level in the configuration option and if the parameter is less than
 or equal to the option value, then the message is output. Levels
-can even have names like &quot;Debug&quot;, &quot;Critical&quot;, &quot;Warning&quot;, ...
+can even have names like "Debug", "Critical", "Warning", ...
 </p>
 <p>
-This approach is useful but setting the log level to &quot;Debug&quot; in an
+This approach is useful but setting the log level to "Debug" in an
 application can result in having a lot of messages from all the
 parts of an application while looking for what's going on only in
 one part of the application (for example database access, user interface,
-networking, ...). Some libraries<sup class="footnote-link" id="source_note_1"><a href="#target_note_1">1</a></sup> use &quot;sections&quot;
+networking, ...). Some libraries<sup class="footnote-link" id="source_note_1"><a href="#target_note_1">1</a></sup> use "sections"
 to be able to choose which part of the application are logged. But each
 message can have only one section.
 </p>
@@ -106,18 +105,18 @@ encoder/decoder. Here is a simple way to do it<sup class="footnote-link" id="sou
 
 <pre class="code-ocaml"><div># <span class="hl kwa">let</span><span class="hl std"> </span><span class="">tag_wrapper</span><span class="hl std"> =
   </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">to_j</span><span class="hl std"> ?</span><span class="">with_doc</span><span class="hl std"> = </span><span class="hl kwa">function</span><span class="hl std">
-  | </span><span class="hl kwc">Database</span><span class="hl std"> -&gt; `</span><span class="hl kwc">String</span><span class="hl std"> </span><span class="hl str">&quot;database&quot;</span><span class="hl std">
-  | </span><span class="hl kwc">Error</span><span class="hl std"> -&gt; `</span><span class="hl kwc">String</span><span class="hl std"> </span><span class="hl str">&quot;error&quot;</span><span class="hl std">
-  | </span><span class="hl kwc">Network</span><span class="hl std"> -&gt; `</span><span class="hl kwc">String</span><span class="hl std"> </span><span class="hl str">&quot;network&quot;</span><span class="hl std">
+  | </span><span class="hl kwc">Database</span><span class="hl std"> -&gt; `</span><span class="hl kwc">String</span><span class="hl std"> </span><span class="hl str">"database"</span><span class="hl std">
+  | </span><span class="hl kwc">Error</span><span class="hl std"> -&gt; `</span><span class="hl kwc">String</span><span class="hl std"> </span><span class="hl str">"error"</span><span class="hl std">
+  | </span><span class="hl kwc">Network</span><span class="hl std"> -&gt; `</span><span class="hl kwc">String</span><span class="hl std"> </span><span class="hl str">"network"</span><span class="hl std">
   </span><span class="hl kwa">in</span><span class="hl std">
   </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">from_j</span><span class="hl std"> ?</span><span class="">def</span><span class="hl std"> (</span><span class="">json</span><span class="hl std"> : </span><span class="hl kwc">Yojson</span><span class="hl std">.</span><span class="hl kwc">Safe</span><span class="hl std">.</span><span class="">json</span><span class="hl std">) =
     </span><span class="hl kwb">match</span><span class="hl std"> </span><span class="">json</span><span class="hl std"> </span><span class="hl kwb">with</span><span class="hl std">
     | `</span><span class="hl kwc">String</span><span class="hl std"> </span><span class="">s</span><span class="hl std"> -&gt;
       </span><span class="hl kwb">begin</span><span class="hl std">
         </span><span class="hl kwb">match</span><span class="hl std"> </span><span class="hl kwc">String</span><span class="hl std">.</span><span class="">lowercase</span><span class="hl std"> </span><span class="">s</span><span class="hl std"> </span><span class="hl kwb">with</span><span class="hl std">
-        | </span><span class="hl str">&quot;database&quot;</span><span class="hl std"> -&gt; </span><span class="hl kwc">Database</span><span class="hl std">
-        | </span><span class="hl str">&quot;error&quot;</span><span class="hl std"> -&gt; </span><span class="hl kwc">Error</span><span class="hl std">
-        | </span><span class="hl str">&quot;network&quot;</span><span class="hl std"> -&gt; </span><span class="hl kwc">Network</span><span class="hl std">
+        | </span><span class="hl str">"database"</span><span class="hl std"> -&gt; </span><span class="hl kwc">Database</span><span class="hl std">
+        | </span><span class="hl str">"error"</span><span class="hl std"> -&gt; </span><span class="hl kwc">Error</span><span class="hl std">
+        | </span><span class="hl str">"network"</span><span class="hl std"> -&gt; </span><span class="hl kwc">Network</span><span class="hl std">
         | </span><span class="hl num">_</span><span class="hl std"> -&gt; </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">invalid_value</span><span class="hl std"> </span><span class="">json</span><span class="hl std">
       </span><span class="hl kwb">end</span><span class="hl std">
     | </span><span class="hl num">_</span><span class="hl std"> -&gt; </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">invalid_value</span><span class="hl std"> </span><span class="">json</span><span class="hl std">
@@ -196,8 +195,8 @@ Then we cas use <span class="icode"><span class="hl kwc">Taglog</span><span clas
 <p> We obtain a function with the expected type, let's test it:
 </p>
 
-<pre class="code-ocaml"><div># <span class="">log</span><span class="hl std"> </span><span class="hl str">&quot;Hello %s !&quot;</span><span class="hl std"> </span><span class="hl str">&quot;world&quot;</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
-</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl str">&quot;%d + %d = %d&quot;</span><span class="hl std"> </span><span class="hl num">1</span><span class="hl std"> </span><span class="hl num">1</span><span class="hl std"> </span><span class="hl num">2</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
+<pre class="code-ocaml"><div># <span class="">log</span><span class="hl std"> </span><span class="hl str">"Hello %s !"</span><span class="hl std"> </span><span class="hl str">"world"</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
+</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl str">"%d + %d = %d"</span><span class="hl std"> </span><span class="hl num">1</span><span class="hl std"> </span><span class="hl num">1</span><span class="hl std"> </span><span class="hl num">2</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
 </div></div></pre>
 
 <p>Of course nothing is printed as our condition option (stored in
@@ -205,10 +204,8 @@ Then we cas use <span class="icode"><span class="hl kwc">Taglog</span><span clas
 should be printed. Let's tag our messages:
 </p>
 
-<pre class="code-ocaml"><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Error</span><span class="hl std">] </span><span class="hl str">&quot;Hello %s !&quot;</span><span class="hl std"> </span><span class="hl str">&quot;world&quot;</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="stderr">Hello world !
-</div><div class="toplevel-out">- : unit = ()
-</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Error</span><span class="hl std"> ; </span><span class="hl kwc">Database</span><span class="hl std">] </span><span class="hl str">&quot;%d + %d = %d&quot;</span><span class="hl std"> </span><span class="hl num">1</span><span class="hl std"> </span><span class="hl num">1</span><span class="hl std"> </span><span class="hl num">2</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="stderr">1 + 1 = 2
-</div><div class="toplevel-out">- : unit = ()
+<pre class="code-ocaml"><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Error</span><span class="hl std">] </span><span class="hl str">"Hello %s !"</span><span class="hl std"> </span><span class="hl str">"world"</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
+</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Error</span><span class="hl std"> ; </span><span class="hl kwc">Database</span><span class="hl std">] </span><span class="hl str">"%d + %d = %d"</span><span class="hl std"> </span><span class="hl num">1</span><span class="hl std"> </span><span class="hl num">1</span><span class="hl std"> </span><span class="hl num">2</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
 </div></div></pre>
 
 <p>
@@ -242,14 +239,12 @@ values:
 <p>Now let's see what happens when we call our <span class="icode"><span class="">log</span></span> function
 in various ways:</p>
 
-<pre class="code-ocaml"><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Database</span><span class="hl std">] </span><span class="hl str">&quot;message about database&quot;</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="stderr">message about database
-</div><div class="toplevel-out">- : unit = ()
-</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Database</span><span class="hl std"> ; </span><span class="hl kwc">Network</span><span class="hl std">] </span><span class="hl str">&quot;network error while querying database&quot;</span><span class="hl std">
+<pre class="code-ocaml"><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Database</span><span class="hl std">] </span><span class="hl str">"message about database"</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
+</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Database</span><span class="hl std"> ; </span><span class="hl kwc">Network</span><span class="hl std">] </span><span class="hl str">"network error while querying database"</span><span class="hl std">
   </span><span class="hl com">(* not printed because or our condition does not accept Network *)</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
-</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Error</span><span class="hl std">] </span><span class="hl str">&quot;Error in query %S&quot;</span><span class="hl std"> </span><span class="hl str">&quot;SELECT ...&quot;</span><span class="hl std">
-  </span><span class="hl com">(* printed thanks to our extension to the evaluation function *)</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="stderr">Error in query &quot;SELECT ...&quot;
-</div><div class="toplevel-out">- : unit = ()
-</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl str">&quot;Hello!&quot;</span><span class="hl std"> </span><span class="hl com">(* not printed because no tags *)</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
+</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Error</span><span class="hl std">] </span><span class="hl str">"Error in query %S"</span><span class="hl std"> </span><span class="hl str">"SELECT ..."</span><span class="hl std">
+  </span><span class="hl com">(* printed thanks to our extension to the evaluation function *)</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
+</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl str">"Hello!"</span><span class="hl std"> </span><span class="hl com">(* not printed because no tags *)</span><span class="hl std">;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
 </div></div></pre>
 
 </div>
@@ -302,9 +297,8 @@ the extension of the <span class="icode"><span class="">tag</span></span> type:
 
 <pre class="code-ocaml"><div># <span class="hl kwa">type</span><span class="hl std"> </span><span class="">tag</span><span class="hl std"> += </span><span class="hl kwc">UI</span><span class="hl std"> [@@</span><span class="">deriving</span><span class="hl std"> </span><span class="">yojson</span><span class="hl std">];;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">type tag += UI
 </div></div><div># <span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">set</span><span class="hl std"> </span><span class="">cond_option</span><span class="hl std"> (</span><span class="hl kwc">Some</span><span class="hl std"> </span><span class="hl kwc">Taglog</span><span class="hl std">.</span><span class="hl kwc">Ops</span><span class="hl std">.(??</span><span class="hl kwc">UI</span><span class="hl std"> || ??</span><span class="hl kwc">Error</span><span class="hl std">));;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
-</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">UI</span><span class="hl std">] </span><span class="hl str">&quot;hello %s&quot;</span><span class="hl std"> </span><span class="hl str">&quot;world&quot;</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="stderr">hello world
-</div><div class="toplevel-out">- : unit = ()
-</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Database</span><span class="hl std">] </span><span class="hl str">&quot;tried connected to database&quot;</span><span class="hl std">
+</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">UI</span><span class="hl std">] </span><span class="hl str">"hello %s"</span><span class="hl std"> </span><span class="hl str">"world"</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
+</div></div><div># <span class="">log</span><span class="hl std"> </span><span class="hl kw4">~tags</span><span class="hl std">: [</span><span class="hl kwc">Database</span><span class="hl std">] </span><span class="hl str">"tried connected to database"</span><span class="hl std">
   </span><span class="hl com">(* not printed since only UI and Error messages are accepted *)</span><span class="hl std"> ;;</span></div><div class="ocaml-toplevel"><div class="toplevel-out">- : unit = ()
 </div></div></pre>
 
@@ -315,10 +309,10 @@ store our condition:
 </p>
 
 <pre class="code-ocaml"><div># <span class="hl kwa">let</span><span class="hl std"> () =
-  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">g</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">add</span><span class="hl std"> </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">group</span><span class="hl std"> [</span><span class="hl str">&quot;condition&quot;</span><span class="hl std">] </span><span class="">cond_option</span><span class="hl std"> </span><span class="hl kwa">in</span><span class="hl std">
-  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">g</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">add</span><span class="hl std"> </span><span class="">g</span><span class="hl std"> [</span><span class="hl str">&quot;level&quot;</span><span class="hl std">] </span><span class="">level_option</span><span class="hl std"> </span><span class="hl kwa">in</span><span class="hl std">
-  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">g</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">add_group</span><span class="hl std"> </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">group</span><span class="hl std"> [</span><span class="hl str">&quot;log&quot;</span><span class="hl std">] </span><span class="">g</span><span class="hl std"> </span><span class="hl kwa">in</span><span class="hl std">
-  </span><span class="">print_endline</span><span class="hl std"> (</span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">to_string</span><span class="hl std"> </span><span class="">g</span><span class="hl std">);;</span></div><div class="ocaml-toplevel"><div class="stdout">{ &quot;log&quot;: { &quot;level&quot;: 0, &quot;condition&quot;: (&quot;OR&quot;, [ &quot;UI&quot; ], [ &quot;Error&quot; ]) } }
+  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">g</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">add</span><span class="hl std"> </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">group</span><span class="hl std"> [</span><span class="hl str">"condition"</span><span class="hl std">] </span><span class="">cond_option</span><span class="hl std"> </span><span class="hl kwa">in</span><span class="hl std">
+  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">g</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">add</span><span class="hl std"> </span><span class="">g</span><span class="hl std"> [</span><span class="hl str">"level"</span><span class="hl std">] </span><span class="">level_option</span><span class="hl std"> </span><span class="hl kwa">in</span><span class="hl std">
+  </span><span class="hl kwa">let</span><span class="hl std"> </span><span class="">g</span><span class="hl std"> = </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">add_group</span><span class="hl std"> </span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">group</span><span class="hl std"> [</span><span class="hl str">"log"</span><span class="hl std">] </span><span class="">g</span><span class="hl std"> </span><span class="hl kwa">in</span><span class="hl std">
+  </span><span class="">print_endline</span><span class="hl std"> (</span><span class="hl kwc">Ocf</span><span class="hl std">.</span><span class="">to_string</span><span class="hl std"> </span><span class="">g</span><span class="hl std">);;</span></div><div class="ocaml-toplevel"><div class="stdout">{ "log": { "level": 0, "condition": ("OR", [ "UI" ], [ "Error" ]) } }
 </div></div></pre>
 
 </div>

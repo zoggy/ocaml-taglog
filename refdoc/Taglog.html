@@ -1,5 +1,4 @@
-<!DOCTYPE HTML>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
 <title>Taglog reference documentation : Taglog</title>
@@ -21,7 +20,7 @@
 </div>
 
 <div id="header">
-
+<main_/>
 </div>
 <div id="page-body">
 
@@ -42,7 +41,7 @@ Logging facilities using tags and levels<br/>
 <code><span class="keyword">|</span></code></td>
 <td align="left" valign="top">
 <code><span id="TYPEELTcond.Tag"><span class="constructor">Tag</span></span> <span class="keyword">of</span> <code class="type">'a</code></code></td>
-<td align="left" class="typefieldcomment" valign="top"><code>(*</code></td><td align="left" class="typefieldcomment" valign="top"><div class="info">
+<td align="left" class="typefieldcomment" valign="top"><code>(*</code></td><td align="left" class="typefieldcomment" valign="top"><div class="info ">
 true if the tag is present<br/>
 </div>
 </td><td align="left" class="typefieldcomment" valign="bottom"><code>*)</code></td>
@@ -52,7 +51,7 @@ true if the tag is present<br/>
 <code><span class="keyword">|</span></code></td>
 <td align="left" valign="top">
 <code><span id="TYPEELTcond.Not"><span class="constructor">Not</span></span> <span class="keyword">of</span> <code class="type">'a <a href="Taglog.html#TYPEcond">cond</a></code></code></td>
-<td align="left" class="typefieldcomment" valign="top"><code>(*</code></td><td align="left" class="typefieldcomment" valign="top"><div class="info">
+<td align="left" class="typefieldcomment" valign="top"><code>(*</code></td><td align="left" class="typefieldcomment" valign="top"><div class="info ">
 logical not<br/>
 </div>
 </td><td align="left" class="typefieldcomment" valign="bottom"><code>*)</code></td>
@@ -62,7 +61,7 @@ logical not<br/>
 <code><span class="keyword">|</span></code></td>
 <td align="left" valign="top">
 <code><span id="TYPEELTcond.Or"><span class="constructor">Or</span></span> <span class="keyword">of</span> <code class="type">'a <a href="Taglog.html#TYPEcond">cond</a> list</code></code></td>
-<td align="left" class="typefieldcomment" valign="top"><code>(*</code></td><td align="left" class="typefieldcomment" valign="top"><div class="info">
+<td align="left" class="typefieldcomment" valign="top"><code>(*</code></td><td align="left" class="typefieldcomment" valign="top"><div class="info ">
 logical or between elements<br/>
 </div>
 </td><td align="left" class="typefieldcomment" valign="bottom"><code>*)</code></td>
@@ -72,18 +71,18 @@ logical or between elements<br/>
 <code><span class="keyword">|</span></code></td>
 <td align="left" valign="top">
 <code><span id="TYPEELTcond.And"><span class="constructor">And</span></span> <span class="keyword">of</span> <code class="type">'a <a href="Taglog.html#TYPEcond">cond</a> list</code></code></td>
-<td align="left" class="typefieldcomment" valign="top"><code>(*</code></td><td align="left" class="typefieldcomment" valign="top"><div class="info">
+<td align="left" class="typefieldcomment" valign="top"><code>(*</code></td><td align="left" class="typefieldcomment" valign="top"><div class="info ">
 logical and between elements<br/>
 </div>
 </td><td align="left" class="typefieldcomment" valign="bottom"><code>*)</code></td>
 </tr></table>
 
-<div class="info">
+<div class="info ">
 Conditions on tags.<br/>
 </div>
 
 
-<pre><span id="VALcond_wrapper"><span class="keyword">val</span> cond_wrapper</span> : <code class="type">'a Ocf.Wrapper.t -&gt; 'a <a href="Taglog.html#TYPEcond">cond</a> Ocf.Wrapper.t</code></pre><div class="info">
+<pre><span id="VALcond_wrapper"><span class="keyword">val</span> cond_wrapper</span> : <code class="type">'a Ocf.Wrapper.t -&gt; 'a <a href="Taglog.html#TYPEcond">cond</a> Ocf.Wrapper.t</code></pre><div class="info ">
 <code class="code">cond_wrapper wrapper</code> creates a <code class="code">'a cond</code> wrapper for
   Ocf options from a wrapper for <code class="code">'a</code> values.<br/>
 </div>
