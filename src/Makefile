@@ -62,13 +62,13 @@ byte: $(LIB_BYTE)
 # Base
 
 $(LIB): $(LIB_CMIFILES) $(LIB_CMXFILES)
-	$(OCAMLFIND) ocamlopt -a -o $@ $(LIB_CMXFILES)
+	$(OCAMLFIND) ocamlopt -g -a -o $@ $(LIB_CMXFILES)
 
 $(LIB_CMXS): $(LIB_CMIFILES) $(LIB_CMXFILES)
-	$(OCAMLFIND) ocamlopt -shared -o $@ $(LIB_CMXFILES)
+	$(OCAMLFIND) ocamlopt -g -shared -o $@ $(LIB_CMXFILES)
 
 $(LIB_BYTE): $(LIB_CMIFILES) $(LIB_CMOFILES)
-	$(OCAMLFIND) ocamlc -a -o $@ $(LIB_CMOFILES)
+	$(OCAMLFIND) ocamlc -g -a -o $@ $(LIB_CMOFILES)
 
 # Test
 TEST1=test1
